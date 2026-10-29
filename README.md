@@ -1,7 +1,5 @@
 # AlgoTrade — Intelligent Trading Strategy Backtesting System
 
-**UET Lahore · Session 2025–29 · Full-stack deliverable (Phase 8+9)**
-
 Educational backtesting platform: **C# / ASP.NET Core** backend with six hand-written DSA
 structures, **Turso (libSQL)** persistence, **Binance** live polling with CSV fallback, and a
 **zero-dependency HTML/CSS/JS** trading terminal (already delivered as Phase 9, embedded here
