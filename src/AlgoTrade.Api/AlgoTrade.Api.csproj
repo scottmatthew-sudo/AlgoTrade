@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>AlgoTrade.Api</RootNamespace>
+    <Description>AlgoTrade REST API + static frontend host + Binance live poller (single process, same-origin).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlgoTrade.Core\AlgoTrade.Core.csproj" />
+    <ProjectReference Include="..\AlgoTrade.Data\AlgoTrade.Data.csproj" />
+  </ItemGroup>
+
+</Project>

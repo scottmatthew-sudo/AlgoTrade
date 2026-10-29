@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>AlgoTrade — Intelligent Trading Strategy Backtesting</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/views.css">
+</head>
+<body>
+<div id="app" class="app-shell">
+
+  <!-- ══════════════════ SIDEBAR ══════════════════ -->
+  <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+    <div class="brand">
+      <div class="brand-logo" aria-hidden="true">
+        <img src="assets/logo.png" alt="" width="30" height="30">
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Algo<em>Trade</em></span>
+        <span class="brand-sub">Backtesting Terminal</span>
+      </div>
+      <button class="icon-btn sidebar-close" id="sidebar-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <nav class="nav" id="nav">
+      <div class="nav-group" data-group="Overview">
+        <a class="nav-item" href="#/dashboard" data-route="#/dashboard">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg></span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+      </div>
+
+      <div class="nav-group" data-group="Market Data">
+        <div class="nav-title">Market Data</div>
+        <a class="nav-item" href="#/import" data-route="#/import">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><path d="M12 15V3m0 0 4 4m-4-4L8 7"/><path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></span>
+          <span class="nav-label">Data Import</span>
+        </a>
+        <a class="nav-item" href="#/datasets" data-route="#/datasets">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5V12c0 1.66 3.58 3 8 3s8-1.34 8-3V5.5"/><path d="M4 12v6.5c0 1.66 3.58 3 8 3s8-1.34 8-3V12"/></svg></span>
+          <span class="nav-label">Datasets</span>
+        </a>
+      </div>
+
+      <div class="nav-group" data-group="Strategy">
+        <div class="nav-title">Strategy</div>
+        <a class="nav-item" href="#/strategies" data-route="#/strategies">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><path d="M4 8h10M18 8h2M4 16h4M12 16h8"/><circle cx="16" cy="8" r="2.2"/><circle cx="10" cy="16" r="2.2"/></svg></span>
+          <span class="nav-label">Strategy Editor</span>
+        </a>
+        <a class="nav-item" href="#/backtest" data-route="#/backtest">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg></span>
+          <span class="nav-label">Run Backtest</span>
+        </a>
+      </div>
+
+      <div class="nav-group" data-group="Analysis">
+        <div class="nav-title">Analysis</div>
+        <a class="nav-item" href="#/results" data-route="#/results">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 20v-6m6 6V9m6 11V4"/></svg></span>
+          <span class="nav-label">Results</span>
+        </a>
+        <a class="nav-item" href="#/compare" data-route="#/compare">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><circle cx="18" cy="12" r="2.6"/><path d="M8.6 6H13a3 3 0 0 1 3 3v.9M8.4 18H13a3 3 0 0 0 3-3v-.9"/></svg></span>
+          <span class="nav-label">Compare</span>
+        </a>
+        <a class="nav-item" href="#/history" data-route="#/history">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+          <span class="nav-label">History</span>
+        </a>
+      </div>
+
+      <div class="nav-group" data-group="System">
+        <div class="nav-title">System</div>
+        <a class="nav-item" href="#/benchmark" data-route="#/benchmark">
+          <span class="nav-ico"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4" rx="1"/><path d="M9 2v3m6-3v3M9 19v3m6-3v3M2 9h3m-3 6h3m14-6h3m-3 6h3"/></svg></span>
+          <span class="nav-label">DSA Benchmark</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="dsa-pill" data-tip="All data structures & algorithms are hand-implemented in C# — no built-in libraries.">
+        <span class="pulse-dot"></span> 6 DSA structures · pure C#
+      </div>
+      <div class="foot-meta">UET Lahore · Session 2025–29</div>
+    </div>
+  </aside>
+
+  <div class="sidebar-scrim" id="sidebar-scrim" aria-hidden="true"></div>
+
+  <!-- ══════════════════ MAIN ══════════════════ -->
+  <div class="main-area">
+    <header class="topbar">
+      <button class="icon-btn burger" id="sidebar-open" aria-label="Open menu">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <div class="view-head">
+        <h1 class="view-title" id="view-title">Dashboard</h1>
+        <span class="view-crumb" id="view-crumb">Overview</span>
+      </div>
+
+      <div class="ticker" id="ticker" aria-label="Live market ticker"></div>
+
+      <div class="topbar-right">
+        <span class="mode-badge mock" id="mode-badge" data-tip="Demo data is generated in-browser. Switch to the live ASP.NET API in Settings.">
+          <span class="pulse-dot"></span><span id="mode-label">MOCK DATA</span>
+        </span>
+        <span class="clock mono" id="clock" aria-label="UTC time">--:--:--</span>
+        <button class="icon-btn" id="settings-btn" aria-label="Settings" data-tip="Connection settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55h.01a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="view-root" id="view-root" tabindex="-1">
+      <!-- views mount here -->
+    </main>
+
+    <footer class="statusbar">
+      <div class="sb-left">
+        <span class="sb-brand mono">ALGOTRADE <em>v0.1.0</em></span>
+        <span class="sb-sep"></span>
+        <span class="sb-hint" id="sb-hint">Historical simulation — not financial advice</span>
+      </div>
+      <div class="sb-right">
+        <span>Engine: <span class="mono ok" id="sb-engine">READY</span></span>
+        <span class="sb-sep"></span>
+        <span>Source: <span class="mono warn" id="sb-source">MOCK</span></span>
+        <span class="sb-sep"></span>
+        <span>Sync: <span class="mono" id="sb-sync">—</span></span>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div id="toast-root" class="toast-root" aria-live="polite"></div>
+<div id="modal-root"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

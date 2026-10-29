@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>AlgoTrade.Core</RootNamespace>
+    <Description>AlgoTrade domain: DSA structures, indicators, strategies, deterministic backtest engine (Blueprint Section 4).</Description>
+  </PropertyGroup>
+
+</Project>

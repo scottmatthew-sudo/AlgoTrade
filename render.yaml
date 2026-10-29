@@ -1,0 +1,19 @@
+# ═══════════════════════════════════════════════════════════════
+# AlgoTrade on Render — free web service (Docker runtime)
+#
+#   render.com → New → Blueprint → pick this repo → done.
+#   First sync asks for the two secrets (sync: false = value is
+#   entered in the dashboard, never stored in this file).
+# ═══════════════════════════════════════════════════════════════
+services:
+  - type: web
+    name: algotrade
+    runtime: docker
+    plan: free
+    region: frankfurt          # EU IP → api.binance.com reachable (US IPs get HTTP 451)
+    healthCheckPath: /api/health
+    envVars:
+      - key: Turso__Url        # double underscore = ASP.NET config override
+        sync: false
+      - key: Turso__Token
+        sync: false

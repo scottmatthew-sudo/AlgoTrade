@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.0.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgoTrade.Core", "src\AlgoTrade.Core\AlgoTrade.Core.csproj", "{D4A10001-1111-4A61-9100-AAAA00000001}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgoTrade.Data", "src\AlgoTrade.Data\AlgoTrade.Data.csproj", "{D4A10002-2222-4A62-9200-AAAA00000002}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgoTrade.Api", "src\AlgoTrade.Api\AlgoTrade.Api.csproj", "{D4A10003-3333-4A63-9300-AAAA00000003}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgoTrade.Tests", "tests\AlgoTrade.Tests\AlgoTrade.Tests.csproj", "{D4A10004-4444-4A64-9400-AAAA00000004}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4A10001-1111-4A61-9100-AAAA00000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A10001-1111-4A61-9100-AAAA00000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A10001-1111-4A61-9100-AAAA00000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A10001-1111-4A61-9100-AAAA00000001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A10002-2222-4A62-9200-AAAA00000002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A10002-2222-4A62-9200-AAAA00000002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A10002-2222-4A62-9200-AAAA00000002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A10002-2222-4A62-9200-AAAA00000002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A10003-3333-4A63-9300-AAAA00000003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A10003-3333-4A63-9300-AAAA00000003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A10003-3333-4A63-9300-AAAA00000003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A10003-3333-4A63-9300-AAAA00000003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A10004-4444-4A64-9400-AAAA00000004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A10004-4444-4A64-9400-AAAA00000004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A10004-4444-4A64-9400-AAAA00000004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A10004-4444-4A64-9400-AAAA00000004}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
