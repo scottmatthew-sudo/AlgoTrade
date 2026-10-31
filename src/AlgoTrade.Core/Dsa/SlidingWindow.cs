@@ -1,13 +1,6 @@
 namespace AlgoTrade.Core.Dsa;
 
-/* ═══════════════════════════════════════════════════════════════
-   SlidingWindowSma — k-period moving average via circular buffer +
-   running sum. O(1) per candle: subtract the oldest, add the new.
 
-   Mirrors js sma() semantics: value becomes available at candle
-   index (period - 1). Benchmarked against the naive "recompute the
-   whole window every step" baseline (O(n·k)) on /benchmark.
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class SlidingWindowSma
 {
     private readonly double[] _buf;
@@ -39,10 +32,7 @@ public sealed class SlidingWindowSma
     public double? Current => _filled >= _period ? _sum / _period : null;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   SlidingWindowExtrema — monotonic-deque min/max over a rolling
-   window (each index enters and leaves the deque at most once).
-   ═══════════════════════════════════════════════════════════════ */
+
 public sealed class SlidingWindowExtrema
 {
     private readonly int _k;

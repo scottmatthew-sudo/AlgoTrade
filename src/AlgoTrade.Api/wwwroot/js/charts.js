@@ -1,11 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · charts.js — hand-rolled canvas chart engine.
-   Zero dependencies: candlesticks + volume, equity curve with
-   drawdown shading, sparklines. DPR-aware, pan + wheel-zoom.
-   (Swap for TradingView Lightweight Charts later if desired —
-   the API of these three functions stays the same.)
-   ═══════════════════════════════════════════════════════════════ */
-
 const C = {
   up: '#22c55e', dn: '#f43f5e', upFill: 'rgba(34,197,94,.9)', dnFill: 'rgba(244,63,94,.9)',
   grid: 'rgba(148,163,184,.07)', axis: 'rgba(148,163,184,.55)', text: '#64748b',
@@ -51,7 +43,7 @@ const fmtAxisTime = (ts) => {
   return `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 };
 
-/* ═════════════ CANDLESTICK + VOLUME ═════════════ */
+
 export function mountCandleChart(box, candles, opts = {}) {
   box.classList.add('chart-panel');
   const tip = document.createElement('div');
@@ -74,21 +66,17 @@ export function mountCandleChart(box, candles, opts = {}) {
     hi += pad; lo -= pad;
     const X = (i) => (i + 0.5) * (plotW / data.length);
     const Y = (p) => padT + (hi - p) / (hi - lo) * priceH;
-
-    // grid + y labels
     ctx.font = `10px ${FONT}`;
     for (const t of niceTicks(lo, hi, 5)) {
       const y = Y(t);
       ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(plotW, y); ctx.stroke();
       ctx.fillStyle = C.text; ctx.textAlign = 'left'; ctx.fillText(fmtAxisPrice(t), plotW + 6, y + 3);
     }
-    // x labels (sparse)
     const stepX = Math.max(1, Math.floor(data.length / 6));
     ctx.textAlign = 'center';
     for (let i = 0; i < data.length; i += stepX) {
       ctx.fillText(fmtAxisTime(data[i].ts), X(i), h - 6);
     }
-    // candles + volume
     const bw = Math.max(1.5, (plotW / data.length) * 0.62);
     data.forEach((c, i) => {
       const x = X(i), up = c.c >= c.o;
@@ -98,13 +86,10 @@ export function mountCandleChart(box, candles, opts = {}) {
       const yo = Y(c.o), yc = Y(c.c);
       const top = Math.min(yo, yc);
       ctx.fillRect(x - bw / 2, top, bw, Math.max(1, Math.abs(yc - yo)));
-      // volume
       const vh = vMax ? (c.v / vMax) * (volH - 4) : 0;
       ctx.fillStyle = up ? 'rgba(34,197,94,.35)' : 'rgba(244,63,94,.35)';
       ctx.fillRect(x - bw / 2, padT + priceH + 6 + (volH - vh), bw, vh);
     });
-
-    // last price line
     const last = data[data.length - 1];
     const ly = Y(last.c);
     ctx.setLineDash([4, 3]);
@@ -115,8 +100,6 @@ export function mountCandleChart(box, candles, opts = {}) {
     ctx.fillRect(plotW + 2, ly - 8, padR - 6, 16);
     ctx.fillStyle = '#04120b'; ctx.textAlign = 'left';
     ctx.fillText(fmtAxisPrice(last.c), plotW + 6, ly + 3.5);
-
-    // crosshair
     if (hover >= 0 && hover >= view.start && hover < view.end) {
       const x = X(hover - view.start);
       ctx.strokeStyle = C.cross; ctx.setLineDash([3, 3]);
@@ -136,8 +119,6 @@ export function mountCandleChart(box, candles, opts = {}) {
   };
 
   const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
-
-  // interactions: wheel zoom + drag pan
   let dragging = false, dragX = 0;
   const onWheel = (e) => {
     e.preventDefault();
@@ -200,7 +181,7 @@ export function mountCandleChart(box, candles, opts = {}) {
   };
 }
 
-/* ═════════════ EQUITY CURVE + DRAWDOWN ═════════════ */
+
 export function mountEquityChart(box, values, opts = {}) {
   box.classList.add('chart-panel');
   const tip = document.createElement('div');
@@ -229,16 +210,12 @@ export function mountEquityChart(box, values, opts = {}) {
       ctx.fillStyle = C.text; ctx.textAlign = 'left';
       ctx.fillText('$' + (narrow ? t.toFixed(2) : fmtAxisPrice(t)), plotW + 6, y + 3);
     }
-
-    // drawdown shading (equity below running peak)
     ctx.beginPath();
     ctx.moveTo(X(0), Y(values[0]));
     for (let i = 1; i < values.length; i++) ctx.lineTo(X(i), Y(values[i]));
     for (let i = values.length - 1; i >= 0; i--) ctx.lineTo(X(i), Y(peaks[i]));
     ctx.closePath();
     ctx.fillStyle = C.dd; ctx.fill();
-
-    // area under equity
     const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
     grad.addColorStop(0, 'rgba(52,211,153,.22)');
     grad.addColorStop(1, 'rgba(52,211,153,0)');
@@ -249,8 +226,6 @@ export function mountEquityChart(box, values, opts = {}) {
     ctx.lineTo(X(0), padT + plotH);
     ctx.closePath();
     ctx.fillStyle = grad; ctx.fill();
-
-    // equity line + peak line
     ctx.lineWidth = 1.8; ctx.strokeStyle = C.accent;
     ctx.beginPath();
     ctx.moveTo(X(0), Y(values[0]));
@@ -262,8 +237,6 @@ export function mountEquityChart(box, values, opts = {}) {
     for (let i = 1; i < values.length; i++) ctx.lineTo(X(i), Y(peaks[i]));
     ctx.stroke();
     ctx.setLineDash([]);
-
-    // initial equity reference
     if (opts.initial != null) {
       const y = Y(opts.initial);
       ctx.strokeStyle = 'rgba(148,163,184,.35)'; ctx.setLineDash([5, 4]);
@@ -272,8 +245,6 @@ export function mountEquityChart(box, values, opts = {}) {
       ctx.fillStyle = C.text; ctx.textAlign = 'left';
       ctx.fillText('initial $' + fmtAxisPrice(opts.initial), 6, y - 4);
     }
-
-    // hover
     if (hover >= 0 && hover < values.length) {
       const x = X(hover), y = Y(values[hover]);
       ctx.strokeStyle = C.cross; ctx.setLineDash([3, 3]);
@@ -310,7 +281,7 @@ export function mountEquityChart(box, values, opts = {}) {
   };
 }
 
-/* ═════════════ SPARKLINE (static, tiny) ═════════════ */
+
 export function sparkline(container, values, color = C.accent, { h = 30, fill = true } = {}) {
   container.style.position = 'relative';
   const { cv, ctx, w } = setupCanvas2(container, h);

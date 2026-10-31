@@ -2,17 +2,7 @@ using AlgoTrade.Core.Domain;
 
 namespace AlgoTrade.Api.Infrastructure;
 
-/* ═══════════════════════════════════════════════════════════════
-   SeedStrategies — first-run content for an empty database.
 
-   A fresh Turso DB has zero strategies, which leaves the Strategy
-   Editor and the Run Backtest dropdowns empty (the UI then has
-   nothing to run). These three built-ins mirror js/store.js seed
-   shapes 1:1 (type ∈ sma|donchian|rsi, p keys the engine reads via
-   StrategyConfig.Int), so demo mode and live mode show identical
-   content. Inserted ONLY when the Strategy table is empty —
-   user-created strategies are never touched or duplicated.
-   ═══════════════════════════════════════════════════════════════ */
 public static class SeedStrategies
 {
     public static IEnumerable<StrategyConfig> Defaults() => new[]

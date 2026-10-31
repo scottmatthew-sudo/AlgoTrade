@@ -1,11 +1,6 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · ui.js — shared view-level components
-   (stat cards, section headers, tables, empty states, kv, chips)
-   ═══════════════════════════════════════════════════════════════ */
-
 import { el, icon, countUp } from './utils.js';
 
-/* ── section header with optional DSA tag ──────────────────── */
+
 export function section(title, { tag = '', actions = null } = {}) {
   return el('div', { class: 'sec-head' },
     el('span', { class: 'sec-title', text: title }),
@@ -15,7 +10,7 @@ export function section(title, { tag = '', actions = null } = {}) {
   );
 }
 
-/* ── KPI stat card ─────────────────────────────────────────── */
+
 export function statCard({ label, value, ico = 'chart', tone = '', sub = null, fmtFn = null, animate = true }) {
   const valueNode = el('div', { class: 'stat-value' });
   const c = el('div', { class: `stat ${tone}` },
@@ -34,7 +29,7 @@ export function statCard({ label, value, ico = 'chart', tone = '', sub = null, f
   return c;
 }
 
-/* ── sortable table ────────────────────────────────────────── */
+
 export function dataTable({ columns, rows, onRowClick, empty = null, footer = null }) {
   // columns: [{key, label, r?, c?, mono?, sortable?, sort?: 'num'|'str', render?(row)}]
   const state = { sortKey: null, dir: 1 };
@@ -55,7 +50,6 @@ export function dataTable({ columns, rows, onRowClick, empty = null, footer = nu
       th.addEventListener('click', () => {
         if (state.sortKey === col.key) state.dir *= -1;
         else { state.sortKey = col.key; state.dir = col.sort === 'str' ? 1 : -1; }
-        // refresh indicators + order
         Array.from(thead.querySelectorAll('th')).forEach((n) => n.classList.remove('sorted'));
         th.classList.add('sorted');
         th.querySelector('.sort-ico').textContent = state.dir > 0 ? '▲' : '▼';
@@ -111,7 +105,7 @@ export function dataTable({ columns, rows, onRowClick, empty = null, footer = nu
   return el('div', { class: 'card' }, wrap, footer ? footer : null);
 }
 
-/* ── empty state ───────────────────────────────────────────── */
+
 export function emptyState({ ico = 'db', title = 'Nothing here yet', sub = '' } = {}) {
   return el('div', { class: 'empty' },
     el('div', { class: 'empty-ico', html: icon(ico, 24) }),
@@ -120,7 +114,7 @@ export function emptyState({ ico = 'db', title = 'Nothing here yet', sub = '' } 
   );
 }
 
-/* ── badges ────────────────────────────────────────────────── */
+
 export function badge(text, tone = 'gray', { dot = false } = {}) {
   return el('span', { class: `badge badge-${tone}` }, dot ? el('span', { class: 'dot' }) : null, text);
 }
@@ -139,7 +133,7 @@ export const reasonBadge = (reason) => {
   return el('span', { class: `badge badge-${tone} trade-reason`, title: reason }, label);
 };
 
-/* ── kv rows ───────────────────────────────────────────────── */
+
 export function kv(pairs) {
   return el('div', { class: 'kv' },
     pairs.filter(Boolean).map(([k, v]) =>
@@ -148,7 +142,7 @@ export function kv(pairs) {
   );
 }
 
-/* ── skeleton loaders ──────────────────────────────────────── */
+
 export function skeletonCards(n = 4) {
   return el('div', { class: 'grid grid-4' },
     Array.from({ length: n }, () => el('div', { class: 'skel card-skel' })),
@@ -159,7 +153,7 @@ export function skeletonRows(n = 6) {
   return el('div', { style: 'padding:16px' }, Array.from({ length: n }, () => el('div', { class: 'skel row-skel' })));
 }
 
-/* ── field helpers ─────────────────────────────────────────── */
+
 export function field(label, control, { hint = null, required = false } = {}) {
   return el('div', { class: 'field' },
     el('label', { class: 'field-label' }, label, required ? el('span', { class: 'req', text: '*' }) : null),
@@ -168,12 +162,12 @@ export function field(label, control, { hint = null, required = false } = {}) {
   );
 }
 
-/* ── complexity tag ────────────────────────────────────────── */
+
 export function cx(complexity, title) {
   return el('span', { class: 'cx', text: complexity, 'data-tip': title || `Hand-implemented in C# — ${complexity}` });
 }
 
-/* ── mock banner ───────────────────────────────────────────── */
+
 export function mockNote(text = 'Demo mode — data is generated in your browser. Connect the ASP.NET Core API to go live.') {
   return el('div', { class: 'hint-banner', style: 'margin-bottom:16px' },
     el('span', { html: icon('info', 16) }),

@@ -7,18 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlgoTrade.Api.Endpoints;
 
-/* ═══════════════════════════════════════════════════════════════
-   Dataset endpoints — the frozen contract from js/api.js:
 
-     GET    /api/datasets                     (list + spark + issues count)
-     GET    /api/datasets/{id}                (full detail + candles)
-     POST   /api/datasets/import              { name, csvText }
-     POST   /api/datasets/demo
-     DELETE /api/datasets/{id}
-     GET    /api/datasets/{id}/candles?page=&size=
-     GET    /api/datasets/{id}/rangestats?from=&to=      (SegmentTree)
-     GET    /api/datasets/{id}/pricelevels?limit=        (MonotonicStack)
-   ═══════════════════════════════════════════════════════════════ */
 public static class DatasetEndpoints
 {
     public sealed record ImportBody(string? Name, string? CsvText);
@@ -213,7 +202,7 @@ public static class DatasetEndpoints
         return app;
     }
 
-    /* ── mirrors js guessTimeframe / symbol guess ── */
+    /* mirrors js guessTimeframe / symbol guess */
     internal static string GuessSymbol(string name)
     {
         var token = name.Split(new[] { ' ', '·', '-', '_' }, StringSplitOptions.RemoveEmptyEntries)

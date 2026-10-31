@@ -3,11 +3,7 @@ using AlgoTrade.Data.Turso;
 
 namespace AlgoTrade.Data.Repos;
 
-/* ═══════════════════════════════════════════════════════════════
-   CandleRepo — bulk upsert + paged reads over the Candle table.
-   Prices/volume cross Scaling (×10⁶) at this boundary ONLY.
-   Bulk inserts go in one pipeline per ~400 rows (fast on Turso).
-   ═══════════════════════════════════════════════════════════════ */
+
 public sealed class CandleRepo
 {
     private readonly TursoClient _db;

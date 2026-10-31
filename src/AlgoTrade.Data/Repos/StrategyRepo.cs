@@ -4,13 +4,7 @@ using AlgoTrade.Data.Turso;
 
 namespace AlgoTrade.Data.Repos;
 
-/* ═══════════════════════════════════════════════════════════════
-   StrategyRepo — versioned strategy CRUD.
-   Stored: short type ('sma'|'donchian'|'rsi') + P/Risk as JSON —
-   exactly the wire format the Strategy Editor round-trips.
-   Runs keep their own snapshot (D23); deleting a strategy SETs
-   their StrategyId NULL via the FK.
-   ═══════════════════════════════════════════════════════════════ */
+
 public sealed class StrategyRepo
 {
     private readonly TursoClient _db;

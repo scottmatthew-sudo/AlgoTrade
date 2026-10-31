@@ -1,18 +1,6 @@
 namespace AlgoTrade.Core.Dsa;
 
-/* ═══════════════════════════════════════════════════════════════
-   Comparison sorts, hand-written with operation counters.
 
-   MergeSortIndices  — stable, O(m log m) always. Production ranking
-                       of backtest runs on the Compare screen (equal
-                       metrics keep original order).
-   QuickSortIndices  — median-of-three pivot + insertion-sort
-                       fallback under 16 elements. O(m log m) avg.
-   BubbleSortIndices — the O(m²) naive baseline for /benchmark.
-
-   All sort INDEX arrays and take a values array — the callers rank
-   (value, index) pairs without materialising them.
-   ═══════════════════════════════════════════════════════════════ */
 public static class OptimizedSorts
 {
     public static int[] MergeSortIndices(double[] v, OpCounter? ops = null)

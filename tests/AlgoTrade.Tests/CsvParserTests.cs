@@ -4,10 +4,6 @@ using AlgoTrade.Core.Import;
 
 namespace AlgoTrade.Tests;
 
-/* ═══════════════════════════════════════════════════════════════
-   CSV parser rule tests — pin the ImportPipeline validation
-   contract (D16 duplicate handling, D17 out-of-order tolerance).
-   ═══════════════════════════════════════════════════════════════ */
 public class CsvParserTests
 {
     private const string Header = "timestamp,open,high,low,close,volume";
@@ -107,8 +103,6 @@ public class CsvParserTests
         Assert.Single(r.Candles);
         Assert.Equal(0, r.Candles[0].V, 9);
     }
-
-    /* ── Binance raw kline dumps + epoch timestamps (server-side additions) ── */
 
     [Fact]
     public void Binance_Headerless_12Col_Dump_Is_Normalized()

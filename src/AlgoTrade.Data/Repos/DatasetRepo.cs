@@ -4,10 +4,7 @@ using AlgoTrade.Data.Turso;
 
 namespace AlgoTrade.Data.Repos;
 
-/* ═══════════════════════════════════════════════════════════════
-   DatasetRepo — MarketDataset CRUD. Datasets used by runs are
-   delete-protected (mirrors the browser store's FK rule).
-   ═══════════════════════════════════════════════════════════════ */
+
 public sealed class DatasetRepo
 {
     private readonly TursoClient _db;
@@ -105,8 +102,6 @@ public sealed class DatasetRepo
         => string.IsNullOrEmpty(json) ? new List<CsvIssue>()
          : (JsonSerializer.Deserialize<List<CsvIssue>>(json) ?? new List<CsvIssue>());
 }
-
-/* Domain record for the dataset metadata row (DB-facing, no candles). */
 public sealed class DatasetMeta
 {
     public long Id { get; set; }

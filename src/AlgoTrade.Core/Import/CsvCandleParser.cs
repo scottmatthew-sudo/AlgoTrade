@@ -3,35 +3,7 @@ using AlgoTrade.Core.Domain;
 
 namespace AlgoTrade.Core.Import;
 
-/* ═══════════════════════════════════════════════════════════════
-   CsvCandleParser — server-side port of js parseCsv() (Phase 2,
-   ImportPipeline). Identical validation semantics:
 
-     • header must contain timestamp + close (full OHLCV recommended)
-     • unparseable timestamp          → REJECT (col timestamp)
-     • non-numeric price              → REJECT (col prices)
-     • non-positive price             → REJECT (col prices)   [*]
-     • inconsistent OHLC              → REJECT (col ohlc)
-     • duplicate timestamp            → REJECT, keep first (D16)
-     • out-of-order rows              → ACCEPT + sort (D17, warn)
-     • missing volume column / cell   → 0
-
-   [*] One documented tightening vs the browser mock: prices ≤ 0
-   are rejected so the DB CHECK (OpenI > 0 …) can never trip
-   mid-import. The browser demo parser accepts o=0 rows.
-
-   Two documented loosenings for real-world files (the canonical
-   6-column path above is completely untouched — standard CSVs
-   validate exactly as the blueprint specifies):
-   [+] raw Binance kline dumps (data.binance.vision monthly/daily
-       zips: headerless, 12 columns, unix-ms open_time) are auto-
-       detected and normalized to the canonical shape BEFORE
-       validation — "open_time,…" headered variants too;
-   [+] unix-epoch timestamp cells (seconds / ms / µs, picked by
-       digit length) are accepted and converted to ISO-UTC.
-
-   JS number semantics mirrored: Number('') === 0, Number('x') === NaN.
-   ═══════════════════════════════════════════════════════════════ */
 public sealed record CsvParseResult(List<Candle> Candles, List<CsvIssue> Issues, int Read, int Dups, int OutOfOrder);
 
 public static class CsvCandleParser
@@ -170,9 +142,6 @@ public static class CsvCandleParser
         }
         catch (FormatException) { return null; }
     }
-
-    /* ── Binance compatibility layer (purely additive — see header note) ── */
-
     /// <summary>Common dataset-export header synonyms → canonical names. Lets
     /// Kaggle/CryptoDataDownload files (unix,date,…,close) import as-is.</summary>
     private static string HeaderAlias(string h) => h switch

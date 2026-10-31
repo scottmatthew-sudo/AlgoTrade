@@ -1,14 +1,6 @@
 namespace AlgoTrade.Core.Dsa;
 
-/* ═══════════════════════════════════════════════════════════════
-   BinaryHeap — bounded min-heap of (value, index).
 
-   TopKIndices keeps the best K items with O(m log k) work instead
-   of a full O(m log m) sort — the Compare screen's "Top-K: best 5"
-   card is the UI face of this structure.
-
-   Comparisons counted inside SiftUp / SiftDown.
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class BinaryHeap
 {
     private double[] _val;

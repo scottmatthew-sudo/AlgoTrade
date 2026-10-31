@@ -1,14 +1,9 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · views/results.js — Results (#/results/:id)
-   + Compare Results (#/compare)  — merge sort ranking + heap top-K
-   ═══════════════════════════════════════════════════════════════ */
-
 import { api } from '../api.js';
 import { el, icon, fmt, toast, openModal } from '../utils.js';
 import { section, dataTable, badge, statusBadge, reasonBadge, emptyState, cx, kv, skeletonCards } from '../ui.js';
 import { mountEquityChart, sparkline } from '../charts.js';
 
-/* ═══════════════ RESULTS DETAIL ═══════════════ */
+
 export async function renderResults(root, params) {
   const kpis = el('div', { class: 'grid grid-5' }, skeletonCards(5));
   root.append(
@@ -30,8 +25,6 @@ export async function renderResults(root, params) {
 
   root.querySelector('.page-sub').innerHTML =
     `Run #${run.id} · ${run.datasetName} · ${run.strategyName} · ${fmt.date(run.runAt, 'full')} · ${statusBadge(run.status).outerHTML}`;
-
-  /* metric cards */
   kpis.innerHTML = '';
   kpis.className = 'grid grid-5';
   const net = el('div', { class: `stat-value ${fmt.pnlClass(m.net)}`, style: 'font-size:23px', text: fmt.money(m.net, { sign: true }) });
@@ -49,8 +42,6 @@ export async function renderResults(root, params) {
       el('div', { class: 'stat-value', style: 'font-size:23px' }, `${m.total}`, el('span', { class: 'unit', text: ` · ${fmt.duration(run.executionMs)}` })),
       el('div', { class: 'stat-foot', text: `${m.wins}W · ${m.losses}L · ${m.breakEven}BE (D14)` })),
   );
-
-  /* equity chart */
   root.append(section('Equity Curve', { tag: 'MARK-TO-MARKET · O(n) PASS' }));
   const legend = el('div', { class: 'chart-legend' },
     el('span', { class: 'lg' }, el('span', { style: 'width:14px;height:2px;background:var(--accent);display:inline-block' }), ' Equity'),
@@ -60,8 +51,6 @@ export async function renderResults(root, params) {
   const box = el('div', { class: 'chart-box' });
   root.append(el('div', { class: 'card' }, legend, box));
   mountEquityChart(box, run.equity, { initial: m.initial });
-
-  /* assumptions + snapshot */
   root.append(el('div', { class: 'grid grid-2 mt-16' },
     el('div', { class: 'card' },
       el('div', { class: 'card-head' }, el('div', { class: 'card-title' }, 'Assumptions'), badge('recorded', 'gray')),
@@ -72,8 +61,6 @@ export async function renderResults(root, params) {
         el('div', { class: 'json-view', style: 'max-height:150px', text: JSON.stringify({ name: run.strategyName, parameters: run.snapshot?.p, risk: run.snapshot?.risk }, null, 2) })),
     ),
   ));
-
-  /* trades */
   root.append(section('Trade Log', { tag: 'O(n) RECORD', actions:
     el('button', { class: 'btn btn-ghost btn-sm', html: icon('download', 14) + 'Export CSV', onclick: () => exportTradesCsv(run) }) }));
   const rows = run.trades.slice().reverse();
@@ -124,7 +111,7 @@ function exportTradesCsv(run) {
   toast('Trade log exported', { type: 'info' });
 }
 
-/* ═══════════════ COMPARE ═══════════════ */
+
 const METRICS = [
   { key: 'netProfit', label: 'Net Profit', fmtFn: v => fmt.money(v, { sign: true }), best: 'high' },
   { key: 'winRatePct', label: 'Win Rate %', fmtFn: v => fmt.pct(v, { digits: 1 }), best: 'high' },
@@ -149,8 +136,6 @@ export async function renderCompare(root) {
     root.append(el('div', { class: 'card' }, emptyState({ ico: 'compare', title: 'Need at least 2 runs', sub: 'Run a couple of backtests first.' })));
     return;
   }
-
-  /* selection chips */
   const selected = new Set(runs.slice(0, 3).map(r => r.id));
   const chipRow = el('div', { class: 'row wrap gap-8', style: 'margin-bottom:14px' });
   function renderChips() {
@@ -172,8 +157,6 @@ export async function renderCompare(root) {
   }
   renderChips();
   root.append(chipRow);
-
-  /* metric picker + sort */
   const metricSel = el('select', { class: 'select', style: 'width:auto' }, METRICS.map(mm => el('option', { value: mm.key, text: mm.label })));
   const topKBtn = el('button', { class: 'btn', html: icon('flash', 14) + '<span>Top-K: best 5 by Net Profit</span>' });
   root.append(section('Head-to-Head', {

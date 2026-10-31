@@ -4,21 +4,6 @@ using AlgoTrade.Core.Dsa;
 
 namespace AlgoTrade.Core.Benchmark;
 
-/* ═══════════════════════════════════════════════════════════════
-   DsaBench — measured evidence for the Big-O report.
-
-   For every algorithm: a NAIVE baseline vs the hand-optimized
-   structure, 5 repetitions (1 warm-up discarded), median/min/max
-   wall time, and counted operations from OpCounter.
-
-   Honesty rule: O(n²)-style naive baselines are only measured up
-   to a ~3·10⁸-operation budget. Beyond that they run at a capped
-   input size and the elapsed time is extrapolated by their exact
-   complexity factor — the OperationDefinition string says so,
-   so no chart ever shows a fabricated "measured" number.
-
-   Results persist to AlgorithmBenchmark (BatchId groups a run).
-   ═══════════════════════════════════════════════════════════════ */
 public sealed record BenchRow(
     string Algo, string Label, string Unit, string Cx, int Size,
     double NaiveMs, long NaiveOps, double OptMs, long OptOps,
@@ -97,7 +82,7 @@ public static class DsaBench
         return (Median(times), times.Min(), times.Max(), ops);
     }
 
-    /* ── 1 · hash table: linear-scan lookup vs open addressing ── */
+    /* hash table: linear-scan lookup vs open addressing */
     private static BenchRow BenchHashtable(int n)
     {
         var keys = new long[n];
@@ -144,7 +129,7 @@ public static class DsaBench
             naiveN == n ? "linear-scan lookup, measured at full n" : $"linear-scan lookup, measured at n={naiveN}, O(n²) extrapolated");
     }
 
-    /* ── 2 · sliding window SMA: recompute-per-window vs running sum ── */
+    /* sliding window SMA: recompute-per-window vs running sum */
     private static BenchRow BenchSliding(int n)
     {
         const int k = 50;
@@ -172,7 +157,7 @@ public static class DsaBench
             "naive recomputes the k-window sum every candle; optimized keeps a running sum");
     }
 
-    /* ── 3 · monotonic stack: nested scan vs O(n) ── */
+    /* monotonic stack: nested scan vs O(n) */
     private static BenchRow BenchStack(int n)
     {
         var series = Series(n);
@@ -205,7 +190,7 @@ public static class DsaBench
             naiveN == n ? "nested forward scan, measured at full n" : $"nested forward scan, measured at n={naiveN}, O(n²) extrapolated");
     }
 
-    /* ── 4 · segment tree: recompute per query vs O(log n) ── */
+    /* segment tree: recompute per query vs O(log n) */
     private static BenchRow BenchSegment(int n)
     {
         const int queries = 1000;
@@ -240,7 +225,7 @@ public static class DsaBench
             $"naive recomputes each of {queries} ranges by full scan; optimized builds one tree then answers in O(log n)");
     }
 
-    /* ── 5/6 · sorts: bubble (naive) vs merge / quick ── */
+    /* sorts: bubble (naive) vs merge / quick */
     private static BenchRow BenchSort(int n, string which)
     {
         var series = Series(n, which == "mergesort" ? 1 : 2);
@@ -276,7 +261,7 @@ public static class DsaBench
             naiveN == n ? "bubble-sort baseline, measured at full n" : $"bubble-sort baseline, measured at n={naiveN}, O(n²) extrapolated");
     }
 
-    /* ── 7 · heap: full sort + take K vs bounded min-heap ── */
+    /* heap: full sort + take K vs bounded min-heap */
     private static BenchRow BenchHeap(int n)
     {
         const int k = 8;

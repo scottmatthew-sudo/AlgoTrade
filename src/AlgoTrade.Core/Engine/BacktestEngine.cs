@@ -2,23 +2,7 @@ using AlgoTrade.Core.Domain;
 
 namespace AlgoTrade.Core.Engine;
 
-/* ═══════════════════════════════════════════════════════════════
-   BacktestEngine — deterministic chronological simulator.
 
-   LOCKED rules (identical to js simulate() — demo and C# produce
-   the SAME trades for the SAME candles):
-
-     D7   signal computed from completed candle i (data ≤ i only)
-     D8   fills at the OPEN of candle i+1
-     D9   per-candle SL/TP via high/low — stop-first when both
-          hit in the same candle; gap-aware (exit at min/max of
-          open vs level)
-     D10  no leverage — entry rejected when qty*fill > cash
-     D11  flat fee per fill, charged as 2×fee on exit
-     D12  equity marked to the CLOSE of every candle
-     D13  open position force-closed at the last close (EndOfData)
-     D14  win = netPnL > 0 (strictly)
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class BacktestEngine
 {
     private enum Sig { Enter, Exit }
@@ -44,7 +28,7 @@ public sealed class BacktestEngine
         {
             Candle c = candles[i];
 
-            /* ── manage an open position on this candle (D9 → D13) ── */
+            /* manage an open position on this candle (D9 → D13) */
             if (inPos)
             {
                 string? reason = null;
@@ -85,7 +69,7 @@ public sealed class BacktestEngine
                 }
             }
 
-            /* ── a signal on candle i fills at candle i+1's open (D8, D10) ── */
+            /* a signal on candle i fills at candle i+1's open (D8, D10) */
             if (!inPos && sig[i] == Sig.Enter && i < candles.Count - 1 && !string.IsNullOrEmpty(risk.Sizing))
             {
                 double fill = candles[i + 1].O;
@@ -104,14 +88,14 @@ public sealed class BacktestEngine
                 }
             }
 
-            /* ── D12: mark to the close of every candle ── */
+            /* D12: mark to the close of every candle */
             equity[i] = cash + (inPos ? (c.C - posEntry) * posQty : 0);
         }
 
         return new EngineOutput(trades, equity);
     }
 
-    /* ── signal generation (D7): computed on candle i using data ≤ i ── */
+    /* signal generation (D7): computed on candle i using data ≤ i */
     private static Sig?[] ComputeSignals(IReadOnlyList<Candle> candles, StrategyConfig strat)
     {
         int n = candles.Count;

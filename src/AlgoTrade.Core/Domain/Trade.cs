@@ -2,14 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace AlgoTrade.Core.Domain;
 
-/* ═══════════════════════════════════════════════════════════════
-   Trade — one completed round-trip (Blueprint §4.4).
 
-   Wire format (FROZEN): { no, dir, entryTs, entry, exitTs, exit,
-                           qty, gross, fees, net, reason }
-   reason ∈ 'Signal' | 'StopLoss' | 'TakeProfit' | 'EndOfData'  (D-check)
-   dir    = 'Long' (engine v1 is long-only, matching the manual).
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class Trade
 {
     [JsonPropertyName("no")] public int No { get; set; }

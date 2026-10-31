@@ -1,15 +1,6 @@
 namespace AlgoTrade.Core.Dsa;
 
-/* ═══════════════════════════════════════════════════════════════
-   MonotonicStack — next-greater / next-smaller price levels.
 
-   Each index is pushed exactly once and popped at most once ⇒
-   O(n) total, versus the O(n²) nested-scan naive baseline.
-   Mirrors js priceLevels(): strict comparisons, -1 when none.
-
-   Used by Dataset Details → "Price Level Analysis" and the
-   'stack' benchmark row.
-   ═══════════════════════════════════════════════════════════════ */
 public static class MonotonicStack
 {
     public static int[] NextGreater(double[] v, OpCounter? ops = null)

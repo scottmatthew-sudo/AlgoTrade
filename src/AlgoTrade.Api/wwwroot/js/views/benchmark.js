@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · views/benchmark.js — DSA Benchmark (#/benchmark)
-   Measures naive baselines vs hand-optimized structures;
-   results persist to AlgorithmBenchmark (BatchId groups a run).
-   ═══════════════════════════════════════════════════════════════ */
-
 import { api } from '../api.js';
 import { el, icon, fmt, toast } from '../utils.js';
 import { section, dataTable, badge, cx, emptyState } from '../ui.js';
@@ -30,7 +24,7 @@ export async function renderBenchmark(root) {
     ),
   );
 
-  /* ── algorithm selection ───────────────────────────────────── */
+
   const selected = new Set(ALGOS.map(a => a.key));
   const cards = el('div', { class: 'grid grid-3' }, ALGOS.map(a => {
     const card = el('div', { class: 'card algo-card card-hover on', role: 'checkbox', 'aria-checked': 'true', tabindex: '0' },
@@ -55,7 +49,7 @@ export async function renderBenchmark(root) {
   const updateCount = () => { if (countEl()) countEl.textContent = `${selected.size} of ${ALGOS.length} selected`; };
   updateCount();
 
-  /* ── size + run ────────────────────────────────────────────── */
+
   root.append(section('2 · Input size (n = candles / m = results)'));
   const sizeSeg = el('div', { class: 'seg' }, SIZES.map((s, i) =>
     el('button', { class: i === 1 ? 'on' : '', text: s.toLocaleString(), 'data-size': s })));
@@ -74,7 +68,7 @@ export async function renderBenchmark(root) {
   root.append(el('div', { class: 'card', style: 'padding:16px;margin-top:2px' },
     el('div', { class: 'row wrap gap-16' }, el('div', { class: 'row gap-8' }, el('span', { class: 'fs-12 dim', text: 'n =' }), sizeSeg), prog, status, runBtn)));
 
-  /* ── results ───────────────────────────────────────────────── */
+
   const resultsSlot = el('div');
   root.append(resultsSlot);
   let lastBatch = null;
@@ -136,7 +130,6 @@ export async function renderBenchmark(root) {
         ),
       ));
     }
-    // animate bars in
     requestAnimationFrame(() => setTimeout(() => {
       resultsSlot.querySelectorAll('.bench-fill').forEach(f => { f.style.width = f.dataset.w + '%'; });
     }, 40));
@@ -154,7 +147,7 @@ export async function renderBenchmark(root) {
     toast('Benchmark CSV exported', { type: 'info' });
   }
 
-  /* ── complexity reference table ────────────────────────────── */
+
   root.append(section('Complexity Reference (theory — prove it above)'));
   root.append(dataTable({
     columns: [

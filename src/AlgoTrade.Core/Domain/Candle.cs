@@ -2,17 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace AlgoTrade.Core.Domain;
 
-/* ═══════════════════════════════════════════════════════════════
-   Candle — the atomic unit of market data (Blueprint §4.1).
 
-   Wire format (FROZEN, matches js/mock-data.js + charts.js):
-     { ts: "2025-01-01T14:00:00", o, h, l, c, v }
-   ts is UTC formatted "yyyy-MM-ddTHH:mm:ss" (sortable, no Z —
-   mirrors the browser mock's toISOString().slice(0,19)).
-
-   DB: prices/volume stored as INTEGER scaled by 1e6 (LOCKED D5).
-   Domain keeps double — identical to JS Number semantics.
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class Candle
 {
     [JsonPropertyName("ts")] public string Ts { get; set; } = "";

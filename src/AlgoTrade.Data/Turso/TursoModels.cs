@@ -2,15 +2,7 @@ using System.Globalization;
 
 namespace AlgoTrade.Data.Turso;
 
-/* ═══════════════════════════════════════════════════════════════
-   Turso wire types (Hrana v2 over HTTP /v2/pipeline).
 
-   Statement args and result cells are typed values:
-     integer → { "type":"integer", "value":"123" }   (STRING-encoded!)
-     float   → { "type":"float",   "value":1.5 }     (JSON number)
-     text    → { "type":"text",    "value":"abc" }
-     null    → { "type":"null" }
-   ═══════════════════════════════════════════════════════════════ */
 /* NOTE: sealed class (not a positional record) so the params-style
    constructor is the ONLY constructor — `new TursoStmt(sql, a, b, c)`
    and `new TursoStmt(sql, argsArray)` both bind unambiguously. */
@@ -37,8 +29,6 @@ public sealed class TursoResult
     public long? LastInsertRowId { get; set; }
 
     public static TursoResult Err(string msg) => new() { IsError = true, ErrorMessage = msg };
-
-    /* ── cell accessors (Hrana types arrive boxed) ── */
     public long L(int row, int col) => CellAs<long>(row, col);
     public double D(int row, int col) => CellAs<double>(row, col);
     public string S(int row, int col) => CellAs<string>(row, col) ?? "";

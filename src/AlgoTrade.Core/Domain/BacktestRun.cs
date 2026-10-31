@@ -2,21 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace AlgoTrade.Core.Domain;
 
-/* ═══════════════════════════════════════════════════════════════
-   BacktestRun — full run aggregate returned by POST /backtest and
-   GET /runs/:id (FROZEN wire shape, mirrors js/store.js mkRun).
 
-     { id, datasetId, strategyId, datasetName, strategyName,
-       runAt, status, error, executionMs,
-       equity: [double per candle]      (D12 mark-to-market)
-       trades: [Trade]
-       assumptions: { initialEquity, fillModel, costs, endOfData }
-       snapshot: <StrategyConfig>       (D23 reproducibility)
-       m: <PerformanceMetrics> }
-
-   GET /runs returns a projection of this (tradeCount, netProfit,
-   winRatePct, …, spark) — see RunEndpoints.
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class BacktestRun
 {
     [JsonPropertyName("id")] public long Id { get; set; }

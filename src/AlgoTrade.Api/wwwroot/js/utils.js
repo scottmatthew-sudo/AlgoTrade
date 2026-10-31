@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · utils.js — formatters, DOM builder, icons,
-   toasts, modals, misc helpers
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ── formatters ────────────────────────────────────────────── */
 const NF2 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const NF0 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 const NF6 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 });
@@ -73,7 +67,7 @@ export const fmt = {
 
 export const pnlClass = fmt.pnlClass;
 
-/* ── DOM builder ───────────────────────────────────────────── */
+
 export function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
@@ -94,7 +88,7 @@ export function el(tag, attrs = {}, ...children) {
   return node;
 }
 
-/* ── icons (inline SVG, lucide-style strokes) ─────────────── */
+
 const I = {
   check:  '<path d="m5 13 4 4L19 7"/>',
   x:      '<path d="M18 6 6 18M6 6l12 12"/>',
@@ -123,7 +117,7 @@ export function icon(name, size = 16) {
   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
 }
 
-/* ── toasts ────────────────────────────────────────────────── */
+
 export function toast(title, { type = 'ok', msg = '', timeout = 3800 } = {}) {
   const root = document.getElementById('toast-root');
   if (!root) return;
@@ -141,7 +135,7 @@ export function toast(title, { type = 'ok', msg = '', timeout = 3800 } = {}) {
   }, timeout);
 }
 
-/* ── modal ─────────────────────────────────────────────────── */
+
 export function openModal({ title, body, footer, wide = false }) {
   const root = document.getElementById('modal-root');
   root.innerHTML = '';
@@ -176,7 +170,7 @@ export function confirmModal({ title = 'Are you sure?', message, confirmLabel = 
   });
 }
 
-/* ── misc helpers ──────────────────────────────────────────── */
+
 export const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 export function debounce(fn, ms = 200) {

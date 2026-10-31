@@ -2,20 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace AlgoTrade.Core.Domain;
 
-/* ═══════════════════════════════════════════════════════════════
-   PerformanceMetrics — the `m` object on a run (FROZEN wire names).
 
-   Locked definitions (Blueprint D14–D15, mirrors js metrics()):
-     total      completed round trips
-     wins       trades with net > 0            (D14)
-     losses     trades with net < 0
-     breakEven  trades with net == 0
-     net        finalEquity - initialEquity
-     winRate    wins / total * 100             (percentage 0..100)
-     pf         grossProfit / grossLoss, NULL when no losing trade
-     maxDd      max peak-to-trough drop of the mark-to-market curve (D12)
-     maxDdPct   maxDd / peak * 100 at the trough
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class PerformanceMetrics
 {
     [JsonPropertyName("total")] public int Total { get; set; }

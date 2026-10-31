@@ -4,14 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlgoTrade.Api.Endpoints;
 
-/* ═══════════════════════════════════════════════════════════════
-   Strategy endpoints (frozen contract):
 
-     GET    /api/strategies
-     POST   /api/strategies        (create → v1)
-     PUT    /api/strategies/{id}   (update → version+1, D23-safe)
-     DELETE /api/strategies/{id}   (runs keep their snapshot)
-   ═══════════════════════════════════════════════════════════════ */
 public static class StrategyEndpoints
 {
     public static IEndpointRouteBuilder MapStrategyEndpoints(this IEndpointRouteBuilder app)

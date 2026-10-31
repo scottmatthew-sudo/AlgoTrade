@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · components.css — buttons, cards, tables, forms,
-   badges, toasts, modals, skeletons, tooltips
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ── buttons ───────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -60,7 +54,7 @@
 .icon-btn:hover { background: rgba(148, 163, 184, .09); color: var(--text-1); }
 .icon-btn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ── cards ─────────────────────────────────────────────────── */
+
 .card {
   background: linear-gradient(180deg, rgba(21, 34, 56, .5), rgba(12, 19, 34, .82));
   border: 1px solid var(--border);
@@ -80,7 +74,7 @@
 .card-body { padding: 16px; }
 .card-body.flush { padding: 0; }
 
-/* KPI stat card */
+
 .stat {
   position: relative;
   overflow: hidden;
@@ -121,7 +115,7 @@
 .stat-value .unit { font-size: 14px; color: var(--text-3); font-weight: 600; margin-left: 3px; }
 .stat-foot { margin-top: 5px; font-size: 11.5px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
 
-/* ── forms ─────────────────────────────────────────────────── */
+
 .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .field-label { font-size: 12px; font-weight: 600; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
 .field-label .req { color: var(--down); }
@@ -184,7 +178,7 @@
 .switch input:checked + .track::after { transform: translateX(16px); background: var(--accent); }
 .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* segmented control */
+
 .seg {
   display: inline-flex;
   padding: 3px;
@@ -208,7 +202,7 @@
 .seg button:hover { color: var(--text-1); }
 .seg button.on { background: var(--surface-4); color: var(--text-1); box-shadow: inset 0 0 0 1px var(--border-strong); }
 
-/* ── tables ────────────────────────────────────────────────── */
+
 .tbl-wrap { overflow-x: auto; }
 
 .tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
@@ -247,7 +241,7 @@
 .tbl .c { text-align: center; }
 .tbl td.mono { font-size: 12px; }
 
-/* ── badges & chips ────────────────────────────────────────── */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -282,7 +276,7 @@
 .chip .x { cursor: pointer; opacity: .6; font-size: 13px; line-height: 1; }
 .chip .x:hover { opacity: 1; color: var(--down); }
 
-/* complexity tag (DSA screens) */
+
 .cx {
   display: inline-flex; align-items: center;
   font-family: var(--font-mono);
@@ -295,7 +289,7 @@
   cursor: help;
 }
 
-/* ── progress ──────────────────────────────────────────────── */
+
 .prog { height: 8px; border-radius: 99px; background: rgba(7, 11, 18, .8); border: 1px solid var(--border); overflow: hidden; }
 .prog > i {
   display: block; height: 100%;
@@ -322,7 +316,7 @@
 .prog-phase.active { color: var(--accent); font-weight: 600; }
 .prog-phase.active .pd { background: var(--accent); animation: at-pulse 1s ease-in-out infinite; box-shadow: 0 0 10px var(--accent-glow); }
 
-/* ── skeleton ──────────────────────────────────────────────── */
+
 .skel {
   border-radius: var(--r-sm);
   background: linear-gradient(90deg, rgba(148,163,184,.07) 25%, rgba(148,163,184,.16) 50%, rgba(148,163,184,.07) 75%);
@@ -333,7 +327,7 @@
 .skel.card-skel { height: 110px; border-radius: var(--r-md); }
 .skel.row-skel { height: 38px; margin-bottom: 8px; }
 
-/* ── spinner ───────────────────────────────────────────────── */
+
 .spinner {
   width: 16px; height: 16px;
   border: 2px solid rgba(52, 211, 153, .2);
@@ -345,7 +339,7 @@
 }
 .spinner.lg { width: 26px; height: 26px; border-width: 3px; }
 
-/* ── toasts ────────────────────────────────────────────────── */
+
 .toast-root {
   position: fixed;
   bottom: 44px; right: 20px;
@@ -375,7 +369,7 @@
 .toast-title { font-size: 13px; font-weight: 650; }
 .toast-msg { font-size: 12px; color: var(--text-2); margin-top: 2px; }
 
-/* ── modal ─────────────────────────────────────────────────── */
+
 .modal-scrim {
   position: fixed; inset: 0;
   background: rgba(4, 7, 12, .68);
@@ -401,7 +395,7 @@
 .modal-body { padding: 18px; overflow-y: auto; }
 .modal-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 18px; border-top: 1px solid var(--border); }
 
-/* ── tooltip (CSS-only) ────────────────────────────────────── */
+
 [data-tip] { position: relative; }
 [data-tip]:hover::after {
   content: attr(data-tip);
@@ -437,7 +431,7 @@
   pointer-events: none;
 }
 
-/* ── empty state ───────────────────────────────────────────── */
+
 .empty {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 10px;
@@ -456,7 +450,7 @@
 .empty-title { font-size: 14px; font-weight: 650; color: var(--text-2); }
 .empty-sub { font-size: 12.5px; max-width: 380px; }
 
-/* ── kv list ───────────────────────────────────────────────── */
+
 .kv { display: flex; flex-direction: column; }
 .kv-row {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -468,7 +462,7 @@
 .kv-key { color: var(--text-3); }
 .kv-val { color: var(--text-1); font-weight: 600; text-align: right; }
 
-/* ── tabs ──────────────────────────────────────────────────── */
+
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); }
 .tab {
   padding: 9px 16px;
