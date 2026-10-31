@@ -116,8 +116,6 @@
   cursor: help;
 }
 
-.foot-meta { margin-top: 8px; font-size: 10.5px; color: var(--text-4); letter-spacing: .06em; text-align: center; }
-
 .pulse-dot {
   width: 7px; height: 7px; flex: none;
   border-radius: 50%;
