@@ -1,5 +1,15 @@
 namespace AlgoTrade.Core.Dsa;
 
+/* ═══════════════════════════════════════════════════════════════
+   SegmentTree — recursive array-backed tree (size 4n) answering
+   range MAX / MIN / SUM over candles in O(log n) per query.
+
+   Used by Dataset Details → "Range Statistics" (highest high /
+   lowest low / volume / average close between two timestamps) and
+   benchmarked against per-query full recomputation.
+
+   Probes count node visits; Comparisons count element comparisons.
+   ═══════════════════════════════════════════════════════════════ */
 public sealed class SegmentTree
 {
     private readonly double[] _max, _min, _sum;

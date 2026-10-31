@@ -6,6 +6,13 @@ using AlgoTrade.Data.Turso;
 
 var builder = WebApplication.CreateBuilder(args);
 
+/* ═════════════ AlgoTrade.Api — one process serves everything ═════════════
+   • wwwroot          → the zero-dependency frontend (same origin, no CORS)
+   • /api/*           → the frozen REST contract from js/api.js
+   • BinancePoller    → BackgroundService, 15s klines + ticker, CSV fallback
+   • Turso (libSQL)   → via HTTP /v2/pipeline, no EF, no native deps
+   ════════════════════════════════════════════════════════════════════════ */
+
 var tursoUrlRaw = builder.Configuration["Turso:Url"] ?? "";
 var tursoToken = builder.Configuration["Turso:Token"] ?? "";
 

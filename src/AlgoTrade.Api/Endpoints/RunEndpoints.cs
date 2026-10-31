@@ -6,6 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlgoTrade.Api.Endpoints;
 
+/* ═══════════════════════════════════════════════════════════════
+   Run endpoints (frozen contract):
+
+     GET    /api/runs                  (list rows shaped like runLite())
+     GET    /api/runs/{id}             (full run: m, equity, trades…)
+     DELETE /api/runs/{id}
+     POST   /api/backtest              { datasetId, strategyId, initialEquity }
+
+   The backtest pipeline mirrors the browser phases:
+     load candles → run engine (D7–D14) → metrics → persist → return run
+   ═══════════════════════════════════════════════════════════════ */
 public static class RunEndpoints
 {
     public sealed record BacktestBody(long DatasetId, long StrategyId, double? InitialEquity);
@@ -42,6 +53,8 @@ public static class RunEndpoints
             double initialEquity = body.InitialEquity is > 0 ? body.InitialEquity.Value : 10000;
 
             var sw = Stopwatch.StartNew();
+
+            /* load → simulate → metrics (all deterministic, D7–D14) */
             var candleList = await candles.LoadAllAsync(body.DatasetId);
             if (candleList.Count == 0)
                 return Results.Json(new { error = "Dataset has no candles" }, statusCode: 400);

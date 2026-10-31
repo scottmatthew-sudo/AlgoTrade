@@ -1,9 +1,15 @@
+/* ═══════════════════════════════════════════════════════════════
+   AlgoTrade · views/data.js — Data Import (#/import)
+   + Datasets list (#/datasets) + Dataset Details (#/datasets/:id)
+   ═══════════════════════════════════════════════════════════════ */
+
 import { api } from '../api.js';
 import { CONFIG } from '../config.js';
 import { el, icon, fmt, toast } from '../utils.js';
 import { section, dataTable, badge, emptyState, mockNote, cx, kv } from '../ui.js';
 import { mountCandleChart } from '../charts.js';
 
+/* ═══════════════ DATA IMPORT ═══════════════ */
 export async function renderImport(root) {
   root.append(
     el('div', { class: 'page-head' },
@@ -16,6 +22,8 @@ export async function renderImport(root) {
   );
 
   let fileRows = null;
+
+  /* dropzone */
   const input = el('input', { type: 'file', accept: '.csv,text/csv', style: 'display:none' });
   const dz = el('div', { class: 'dropzone', role: 'button', tabindex: '0', 'aria-label': 'Upload CSV file' },
     el('div', { class: 'dz-ico', html: icon('upload', 26) }),
@@ -71,6 +79,8 @@ export async function renderImport(root) {
     result.append(parsing);
     const res = await api.importCsv({ name: fileName.replace(/\.csv$/i, ''), csvText });
     parsing.remove();
+
+    /* column mapping card */
     const maps = [['timestamp', 'Timestamp'], ['open', 'Open'], ['high', 'High'], ['low', 'Low'], ['close', 'Close'], ['volume', 'Volume']];
     result.append(el('div', { class: 'card mt-16' },
       el('div', { class: 'card-head' },
@@ -81,6 +91,8 @@ export async function renderImport(root) {
         maps.map(([from, to]) => el('span', { class: `mapping-chip ${res.ok ? 'auto' : 'missing'}` }, from, el('span', { class: 'arrow', text: '→' }), el('span', { class: 'to', text: to }))),
       ),
     ));
+
+    /* summary */
     const isum = el('div', { class: 'import-summary mt-16' },
       isumCard(res.read ?? 0, 'rows read'),
       isumCard(res.accepted ?? 0, 'accepted', 'up'),
@@ -89,6 +101,8 @@ export async function renderImport(root) {
       isumCard(res.outOfOrder ?? 0, 'out of order'),
     );
     result.append(isum);
+
+    /* issues table */
     if (res.issues?.length) {
       result.append(el('div', { class: 'card mt-16' },
         el('div', { class: 'card-head' }, el('div', { class: 'card-title' }, 'Validation Report'),
@@ -105,6 +119,8 @@ export async function renderImport(root) {
         )),
       ));
     }
+
+    /* save CTA */
     result.append(el('div', { class: 'row gap-12 mt-16', style: 'justify-content:flex-end' },
       el('button', { class: 'btn', text: 'Discard', onclick: () => { result.innerHTML = ''; } }),
       res.ok ? el('button', {
@@ -127,6 +143,7 @@ export async function renderImport(root) {
   }
 }
 
+/* ═══════════════ DATASETS LIST ═══════════════ */
 export async function renderDatasets(root) {
   root.append(
     el('div', { class: 'page-head' },
@@ -156,6 +173,7 @@ export async function renderDatasets(root) {
   }));
 }
 
+/* ═══════════════ DATASET DETAILS ═══════════════ */
 export async function renderDatasetDetails(root, params) {
   const d = await api.getDataset(params.id);
   if (!d) { root.append(emptyState({ title: 'Dataset not found', sub: 'It may have been deleted.' })); return; }
@@ -174,12 +192,16 @@ export async function renderDatasetDetails(root, params) {
         el('button', { class: 'btn btn-primary', html: icon('play', 15) + '<span>Backtest this dataset</span>', onclick: () => location.hash = `#/backtest?dataset=${d.id}` })),
     ),
   );
+
+  /* meta cards */
   root.append(el('div', { class: 'grid grid-4' },
     metaCard('Candles', fmt.int(d.candles.length)),
     metaCard('Timeframe', d.timeframe?.toUpperCase() || '—'),
     metaCard('First candle', fmt.date(d.firstTs)),
     metaCard('Last candle', fmt.date(d.lastTs)),
   ));
+
+  /* chart */
   const legend = el('div', { class: 'chart-legend' });
   const box = el('div', { class: 'chart-box' });
   root.append(el('div', { class: 'card mt-16' }, legend, box));
@@ -191,6 +213,7 @@ export async function renderDatasetDetails(root, params) {
   upd(null);
   mountCandleChart(box, d.candles, { onHover: upd });
 
+  /* ── range statistics (segment tree tool) ─────────────────── */
   root.append(section('Range Statistics', { tag: 'SEGMENT TREE · O(log n)', actions: null }));
   const fromSel = el('select', { class: 'select' }, d.candles.filter((_, i) => i % Math.max(1, Math.floor(d.candles.length / 60)) === 0).map(c => el('option', { value: c.ts, text: c.ts })));
   const toSel = el('select', { class: 'select' }, [...fromSel.options].map(o => el('option', { value: o.value, text: o.text, selected: o === fromSel.options[fromSel.options.length - 1] })));
@@ -222,6 +245,7 @@ export async function renderDatasetDetails(root, params) {
   ));
   await computeStats();
 
+  /* ── price level analysis (monotonic stack) ───────────────── */
   root.append(section('Price Level Analysis', { tag: 'MONOTONIC STACK · O(n)' }));
   root.append(el('div', { class: 'hint-banner', style: 'margin-bottom:12px' },
     el('span', { html: icon('alert', 16) }),
@@ -238,6 +262,7 @@ export async function renderDatasetDetails(root, params) {
     rows: levels.slice().reverse(),
   }));
 
+  /* ── candle table (paged) ─────────────────────────────────── */
   root.append(section('Candle Data'));
   const tblWrap = el('div');
   const pagerInfo = el('span');

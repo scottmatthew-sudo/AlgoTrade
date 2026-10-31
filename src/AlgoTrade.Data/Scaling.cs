@@ -2,6 +2,15 @@ using System.Globalization;
 
 namespace AlgoTrade.Data;
 
+/* ═══════════════════════════════════════════════════════════════
+   Scaling — the D5 translation layer.
+
+   SQLite (Turso) has no DECIMAL. LOCKED scheme:
+     money / prices / volume / qty  → INTEGER × 10⁶
+     percent metrics                → INTEGER × 10⁴
+   Domain stays double (JS-Number semantics); this file is the ONLY
+   place that converts, so the rule stays auditable in one spot.
+   ═══════════════════════════════════════════════════════════════ */
 public static class Scaling
 {
     public const long MoneyScale = 1_000_000;

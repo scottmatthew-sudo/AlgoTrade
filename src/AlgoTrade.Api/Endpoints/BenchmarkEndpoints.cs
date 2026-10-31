@@ -1,9 +1,23 @@
+using AlgoTrade.Api.Infrastructure;
 using AlgoTrade.Core.Benchmark;
 using AlgoTrade.Data.Repos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlgoTrade.Api.Endpoints;
 
+/* ═══════════════════════════════════════════════════════════════
+   Benchmark + live endpoints (frozen contract):
+
+     GET /api/benchmark?algos=a,b,c&size=10000
+         → { batchId, machine, results: [ { algo, label, unit, cx, size,
+               naive: {ms, ops}, opt: {ms, ops}, speedup } ] }
+         REAL measured timings + operation counters, persisted to
+         AlgorithmBenchmark (BatchId groups the batch, MachineInfo kept).
+
+     GET /api/live/ticker  → [ { symbol, price, prev, delta } ]
+     GET /api/live/candles?symbol=&tf=&limit=
+         → { status: LIVE|CACHED|OFFLINE, symbol, tf, lastUpdateUtc, candles }
+   ═══════════════════════════════════════════════════════════════ */
 public static class BenchmarkEndpoints
 {
     private static readonly string[] KnownAlgos =

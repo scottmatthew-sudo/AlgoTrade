@@ -2,6 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace AlgoTrade.Core.Domain;
 
+/* ═══════════════════════════════════════════════════════════════
+   Import models (Blueprint §4.5 / D16–D18).
+
+   CsvIssue      — one validation finding; rejected=true means the
+                   row was NOT persisted, false = advisory warning.
+   ImportReport  — response of POST /datasets/import (FROZEN):
+     { ok, datasetId?, issues[], read, accepted, rejected, dups, outOfOrder }
+   ═══════════════════════════════════════════════════════════════ */
 public sealed class CsvIssue
 {
     [JsonPropertyName("row")] public int Row { get; set; }

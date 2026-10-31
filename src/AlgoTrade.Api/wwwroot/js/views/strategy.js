@@ -1,3 +1,8 @@
+/* ═══════════════════════════════════════════════════════════════
+   AlgoTrade · views/strategy.js — Strategy Editor (#/strategies)
+   + Run Backtest (#/backtest)
+   ═══════════════════════════════════════════════════════════════ */
+
 import { api } from '../api.js';
 import { el, icon, fmt, toast, setRangeFill } from '../utils.js';
 import { section, field, badge, emptyState, cx, statusBadge } from '../ui.js';
@@ -36,6 +41,7 @@ const SCHEMAS = {
 
 const defaultRisk = () => ({ sizing: 'percent', percentOfEquity: 10, fixedUnits: 1, slPct: null, tpPct: null, feePerTrade: 0 });
 
+/* ═══════════════ STRATEGY EDITOR ═══════════════ */
 export async function renderStrategies(root) {
   root.append(
     el('div', { class: 'page-head' },
@@ -79,6 +85,7 @@ export async function renderStrategies(root) {
   }
   function markList() { listCol.querySelectorAll('.strat-item').forEach((n, i) => n.classList.toggle('on', current && strategies[i] && strategies[i].id === current.id)); }
 
+  /* ── editor ────────────────────────────────────────────────── */
   let form = null;
   function renderEditor() {
     const isNew = !current;
@@ -113,6 +120,8 @@ export async function renderStrategies(root) {
       }
     }
     renderParams();
+
+    /* risk panel */
     const risk = strat.risk;
     const sizingSeg = el('div', { class: 'seg' },
       el('button', { class: risk.sizing === 'percent' ? 'on' : '', text: '% of equity', onclick: (e) => { risk.sizing = 'percent'; syncSeg(sizingSeg, e); refreshJson(); } }),
@@ -243,6 +252,7 @@ function syntaxJson(obj) {
     .replace(/: null/g, ': <span class="jb">null</span>');
 }
 
+/* ═══════════════ RUN BACKTEST ═══════════════ */
 export async function renderBacktest(root, params = {}) {
   root.append(
     el('div', { class: 'page-head' },
@@ -383,6 +393,8 @@ export async function renderBacktest(root, params = {}) {
       log(`run #${run.id} saved — ${run.m.total} trades, net ${fmt.money(run.m.net, { sign: true })}, ${run.executionMs} ms`, 'ok');
       log('engine done — reproducible via strategy snapshot (D23)', 'ok');
       toast('Backtest completed', { msg: `Run #${run.id} — ${run.m.total} trades · net ${fmt.money(run.m.net, { sign: true })}` });
+
+      /* inline summary */
       resultSlot.append(el('div', { class: 'card', style: 'border-color:var(--border-accent)' },
         el('div', { class: 'card-body row wrap gap-16' },
           el('div', {}, el('div', { class: 'stat-label', text: 'Net P/L' }), el('div', { class: `stat-value mono ${fmt.pnlClass(run.m.net)}`, style: 'font-size:22px', text: fmt.money(run.m.net, { sign: true }) })),

@@ -5,6 +5,11 @@ using AlgoTrade.Core.Engine;
 
 namespace AlgoTrade.Tests;
 
+/* ═══════════════════════════════════════════════════════════════
+   Engine oracle tests — hand-computed scenarios that pin the
+   LOCKED rules D7/D8, D9, D10, D11, D12, D13, D14. If someone
+   "optimizes" the engine into look-ahead territory, these fail.
+   ═══════════════════════════════════════════════════════════════ */
 public class EngineTests
 {
     private static Candle C(string ts, double o, double h, double l, double c, double v = 100)
@@ -18,7 +23,7 @@ public class EngineTests
         Risk = new RiskSettings { Sizing = "percent", PercentOfEquity = pct, SlPct = sl, TpPct = tp, FeePerTrade = fee },
     };
 
-    /* D7/D8: signal on close i ⇒ fill at open of i+1 — never earlier */
+    /* ── D7/D8: signal on close i ⇒ fill at open of i+1 — never earlier ── */
     [Fact]
     public void Signal_Fills_At_Next_Open_Not_Current()
     {
@@ -40,7 +45,7 @@ public class EngineTests
         Assert.Equal(22, trade.Exit, 9);
     }
 
-    /* D9: stop-first when SL and TP are both touched in one candle */
+    /* ── D9: stop-first when SL and TP are both touched in one candle ── */
     [Fact]
     public void Same_Candle_Stop_And_Target_Stop_Wins()
     {
@@ -62,7 +67,7 @@ public class EngineTests
         Assert.Equal(100, trade.Entry, 9);
     }
 
-    /* D9 gap handling: open beyond the stop fills AT the open */
+    /* ── D9 gap handling: open beyond the stop fills AT the open ── */
     [Fact]
     public void Gap_Through_Stop_Fills_At_Open()
     {
@@ -82,7 +87,7 @@ public class EngineTests
         Assert.Equal(80, trade.Exit, 9);                              // min(open=80, stop=95) = open
     }
 
-    /* D10: no leverage — entry rejected when qty*fill > cash */
+    /* ── D10: no leverage — entry rejected when qty*fill > cash ── */
     [Fact]
     public void No_Leverage_Entry_Rejected_When_Cost_Exceeds_Cash()
     {
@@ -106,7 +111,7 @@ public class EngineTests
         Assert.All(outp.Equity, e => Assert.Equal(10000, e, 9));
     }
 
-    /* D11: flat fee per fill, charged 2× on exit */
+    /* ── D11: flat fee per fill, charged 2× on exit ── */
     [Fact]
     public void Flat_Fee_Charged_Twice_On_Exit()
     {
@@ -127,7 +132,7 @@ public class EngineTests
         Assert.Equal(10000 + trade.Net, outp.Equity[^1], 6);
     }
 
-    /* D12: equity marked to the close of every candle */
+    /* ── D12: equity marked to the close of every candle ── */
     [Fact]
     public void Equity_Marked_To_Close_Every_Candle()
     {
@@ -150,7 +155,7 @@ public class EngineTests
         Assert.Equal(101, outp.Trades[^1].Exit, 9);
     }
 
-    /* D14: win = net > 0 (strict) — zero-P/L trade is a break-even, not a win */
+    /* ── D14: win = net > 0 (strict) — zero-P/L trade is a break-even, not a win ── */
     [Fact]
     public void Win_Is_Strictly_Positive_Net()
     {
@@ -170,7 +175,7 @@ public class EngineTests
         Assert.Equal(2.5, m.Pf!, 9);
     }
 
-    /* determinism: same inputs → identical trades */
+    /* ── determinism: same inputs → identical trades ── */
     [Fact]
     public void Engine_Is_Deterministic()
     {

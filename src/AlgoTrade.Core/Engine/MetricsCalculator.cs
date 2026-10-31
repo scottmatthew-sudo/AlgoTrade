@@ -2,6 +2,13 @@ using AlgoTrade.Core.Domain;
 
 namespace AlgoTrade.Core.Engine;
 
+/* ═══════════════════════════════════════════════════════════════
+   MetricsCalculator — exact port of js metrics().
+
+   D14  win = net > 0 (strict); breakEven = net == 0
+   D15  profit factor NULL when there is no losing trade
+   D12  drawdown measured on the mark-to-market equity curve
+   ═══════════════════════════════════════════════════════════════ */
 public static class MetricsCalculator
 {
     public static PerformanceMetrics Compute(IReadOnlyList<Trade> trades, IReadOnlyList<double> equity, double initialEquity)

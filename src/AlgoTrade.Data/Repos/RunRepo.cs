@@ -4,6 +4,14 @@ using AlgoTrade.Data.Turso;
 
 namespace AlgoTrade.Data.Repos;
 
+/* ═══════════════════════════════════════════════════════════════
+   RunRepo — persists a completed backtest (run row + trades in
+   one transaction-ish pipeline), then lists / loads / deletes.
+
+   Column snapshots (scaled) keep SQL-side queries fast; the JSON
+   snapshots (equity curve, exact metrics incl. pf NULL, D23
+   strategy snapshot, assumptions) rebuild the full run object.
+   ═══════════════════════════════════════════════════════════════ */
 public sealed class RunRepo
 {
     private readonly TursoClient _db;

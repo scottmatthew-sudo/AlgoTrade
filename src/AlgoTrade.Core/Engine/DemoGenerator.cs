@@ -2,6 +2,15 @@ using AlgoTrade.Core.Domain;
 
 namespace AlgoTrade.Core.Engine;
 
+/* ═══════════════════════════════════════════════════════════════
+   DemoGenerator — server-side port of js genCandles() (GBM with
+   volatility clustering + mulberry32 seeded RNG), powering
+   POST /datasets/demo (DOGEUSDT · 5m seed 88 n 1200).
+
+   The RNG is bit-exact with the browser's mulberry32 (uint32
+   arithmetic) so demo datasets line up across modes; timestamps
+   anchor to "now" like the JS version.
+   ═══════════════════════════════════════════════════════════════ */
 public static class DemoGenerator
 {
     public sealed record DemoSpec(string Symbol, int Seed, int N, int TfMinutes, double EndPrice, double VolPct);

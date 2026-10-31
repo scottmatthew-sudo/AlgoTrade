@@ -7,6 +7,17 @@ namespace AlgoTrade.Core;
    with its own namespace at call sites (C# resolves the child namespace
    first → CS0234). Root placement makes Indicators.Sma(...) resolve cleanly. */
 
+/* ═══════════════════════════════════════════════════════════════
+   Indicators — exact ports of the browser mock (js/mock-data.js).
+   Every rule here is LOCKED: the C# engine and the demo-mode JS
+   engine must produce identical signals for identical candles.
+
+   Sma  — running sum; value at index i for i ≥ period-1, null before.
+   Rsi  — Wilder smoothing: seed averages at i == period, then
+          g = (g*(p-1) + up) / p. RSI = 100 when avgLoss == 0.
+   HighestHigh / LowestLow — window EXCLUDES the current candle
+          (j from max(0, i-n) to i-1), matching Donchian usage.
+   ═══════════════════════════════════════════════════════════════ */
 public static class Indicators
 {
     /// <summary>Simple moving average; null during warm-up (mirrors js sma()).</summary>

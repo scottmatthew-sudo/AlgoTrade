@@ -2,6 +2,18 @@ using System.Text.Json.Serialization;
 
 namespace AlgoTrade.Core.Domain;
 
+/* ═══════════════════════════════════════════════════════════════
+   StrategyConfig — versioned strategy wire object (FROZEN).
+
+   Browser shape (js/store.js):
+     { id, name, type, desc, p: {...}, risk: {...}, version,
+       createdAt, updatedAt }
+   type ∈ 'sma' | 'donchian' | 'rsi'
+   p    ∈ { fast, slow } | { entry, exit } | { period, os, ob }
+
+   D23 — every BacktestRun stores a full JSON snapshot of the
+   config it ran with, so later edits never rewrite history.
+   ═══════════════════════════════════════════════════════════════ */
 public sealed class StrategyConfig
 {
     [JsonPropertyName("id")] public long? Id { get; set; }
@@ -14,7 +26,7 @@ public sealed class StrategyConfig
     [JsonPropertyName("createdAt")] public string? CreatedAt { get; set; }
     [JsonPropertyName("updatedAt")] public string? UpdatedAt { get; set; }
 
-    /* typed parameter accessors (numbers may arrive as int/double) */
+    /* ── typed parameter accessors (numbers may arrive as int/double) ── */
     public int Int(string key, int fallback = 0)
     {
         if (!P.TryGetValue(key, out var v) || v is null) return fallback;
@@ -27,6 +39,10 @@ public sealed class StrategyConfig
     }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   RiskSettings — D10–D11: sizing, protective exits, flat fees.
+   slPct / tpPct null ⇒ protective exit disabled.
+   ═══════════════════════════════════════════════════════════════ */
 public sealed class RiskSettings
 {
     [JsonPropertyName("sizing")] public string Sizing { get; set; } = "percent";
