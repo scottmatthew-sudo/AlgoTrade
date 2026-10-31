@@ -5,9 +5,6 @@ using AlgoTrade.Core.Engine;
 
 namespace AlgoTrade.Tests;
 
-/* ═══════════════════════════════════════════════════════════════
-   Metrics oracle — hand-computed numbers pin the formulas (D12/D14/D15).
-   ═══════════════════════════════════════════════════════════════ */
 public class MetricsTests
 {
     [Fact]

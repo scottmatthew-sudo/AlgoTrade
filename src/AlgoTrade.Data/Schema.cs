@@ -1,25 +1,5 @@
 namespace AlgoTrade.Data;
 
-/* ═══════════════════════════════════════════════════════════════
-   Schema — DDL translated from Blueprint Section 5 into SQLite
-   (Turso). Mirrors docs/001_schema_turso.sql plus three nullable
-   extension columns needed by the frozen web contract:
-
-     MarketDataset.ValidationIssuesJson  — full import report (D18 UI)
-     BacktestRun.EquityCurveJson         — D12 curve for the chart
-     BacktestRun.MetricsJson             — exact metrics incl. pf NULL
-
-   Scaled columns remain the queryable source of truth; the JSON
-   columns are fidelity snapshots for the UI.
-
-   ⚠ Databases created from the blueprint SQL (or an earlier build)
-   predate those columns, and CREATE TABLE IF NOT EXISTS never
-   upgrades an existing table — so EnsureCreatedAsync also runs
-   Migrations (ALTER TABLE ADD COLUMN) on every start. All three
-   are nullable TEXT → instant, data-safe, idempotent; the
-   "duplicate column" failure on already-upgraded DBs is expected
-   and swallowed.
-   ═══════════════════════════════════════════════════════════════ */
 public static class Schema
 {
     public static readonly string[] Ddl =
@@ -143,7 +123,7 @@ public static class Schema
         "CREATE INDEX IF NOT EXISTS IX_Trade_Run             ON Trade(RunId)",
     };
 
-    /* ── column migrations for databases that predate the extension
+    /* column migrations for databases that predate the extension
        columns (created from the blueprint SQL or an earlier build).
        Nullable TEXT ADD COLUMN → instant and data-safe in SQLite. */
     public static readonly string[] Migrations =

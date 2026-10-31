@@ -1,9 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · config.js — runtime configuration
-   MOCK mode powers the UI from the in-browser engine.
-   Flip to LIVE once the ASP.NET Core API (Phase 8) is deployed.
-   ═══════════════════════════════════════════════════════════════ */
-
 const store = {
   get mock() { try { return localStorage.getItem('at.mock') !== '0'; } catch { return true; } },
   set mock(v) { try { localStorage.setItem('at.mock', v ? '1' : '0'); } catch { /* noop */ } },

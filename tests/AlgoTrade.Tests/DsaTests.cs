@@ -4,11 +4,6 @@ using Xunit;
 
 namespace AlgoTrade.Tests;
 
-/* ═══════════════════════════════════════════════════════════════
-   DSA correctness — every structure is validated against a brute
-   force reference on deterministic inputs. Operation counters are
-   also asserted > 0 (the benchmark screen needs them real).
-   ═══════════════════════════════════════════════════════════════ */
 public class DsaTests
 {
     private static double[] Series(int n, int salt = 0)
@@ -30,7 +25,7 @@ public class DsaTests
         return v;
     }
 
-    /* ── FixedHashTable vs Dictionary ── */
+    /* FixedHashTable vs Dictionary */
     [Fact]
     public void HashTable_Matches_Dictionary()
     {
@@ -67,7 +62,7 @@ public class DsaTests
         Assert.Equal(1, v);
     }
 
-    /* ── SlidingWindowSma vs direct window sums ── */
+    /* SlidingWindowSma vs direct window sums */
     [Fact]
     public void Sliding_Sma_Matches_Brute_Force()
     {
@@ -86,7 +81,7 @@ public class DsaTests
         }
     }
 
-    /* ── SlidingWindowExtrema vs brute force ── */
+    /* SlidingWindowExtrema vs brute force */
     [Fact]
     public void Sliding_Extrema_Match_Brute_Force()
     {
@@ -104,7 +99,7 @@ public class DsaTests
         }
     }
 
-    /* ── Monotonic stack vs O(n²) scan ── */
+    /* Monotonic stack vs O(n²) scan */
     [Fact]
     public void NextGreater_Matches_Naive_Scan()
     {
@@ -133,7 +128,7 @@ public class DsaTests
         Assert.Equal(expect, fast);
     }
 
-    /* ── SegmentTree vs per-query recomputation ── */
+    /* SegmentTree vs per-query recomputation */
     [Fact]
     public void SegmentTree_Range_Queries_Match_Brute_Force()
     {
@@ -163,7 +158,7 @@ public class DsaTests
         Assert.True(ops.Probes > 0);
     }
 
-    /* ── merge sort is STABLE: ties keep original index order ── */
+    /* merge sort is STABLE: ties keep original index order */
     [Fact]
     public void MergeSort_Is_Stable()
     {
@@ -183,7 +178,7 @@ public class DsaTests
         Assert.Equal(v.Length, order.Distinct().Count());
     }
 
-    /* ── heap top-K vs LINQ reference ── */
+    /* heap top-K vs LINQ reference */
     [Fact]
     public void Heap_TopK_Matches_Linq()
     {
@@ -203,7 +198,7 @@ public class DsaTests
         Assert.Equal(expect, got);
     }
 
-    /* ── the whole DSA benchmark runs within sane time bounds ── */
+    /* the whole DSA benchmark runs within sane time bounds */
     [Fact]
     public void DsaBench_Runs_All_Algorithms()
     {

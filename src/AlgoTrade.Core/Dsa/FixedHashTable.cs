@@ -2,17 +2,6 @@ using System.Numerics;
 
 namespace AlgoTrade.Core.Dsa;
 
-/* ═══════════════════════════════════════════════════════════════
-   FixedHashTable — open addressing (linear probing), power-of-two
-   capacity, FNV-style 64-bit mix. long key → int value.
-
-   Used by: CandleSeries timestamp→index lookups (O(1) average),
-   and benchmarked against a linear-scan baseline on /benchmark.
-
-   Capacity is FIXED at construction (no rehash): sized up-front
-   to hold `capacity` entries at ≤ 0.75 load factor. Inserting
-   beyond that throws — deterministic and honest.
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class FixedHashTable
 {
     private readonly long[] _keys;

@@ -6,16 +6,6 @@ using AlgoTrade.Core.Import;
 
 namespace AlgoTrade.Api.Infrastructure;
 
-/* ═══════════════════════════════════════════════════════════════
-   Live feed plumbing (Blueprint Phase 7):
-
-     Binance REST /api/v3/klines  → BackgroundService polls every
-     15s → newest CLOSED 1m candle goes to the in-memory ring AND
-     is appended to a CSV file. If Binance is unreachable the
-     poller serves the CSV tail instead — the UI badge flips
-     LIVE → CACHED, and the fallback chain never breaks.
-   ═══════════════════════════════════════════════════════════════ */
-
 public sealed record TickerRow(string Symbol, double Price, double Prev, double Delta);
 
 public sealed class LiveFeedState
@@ -87,7 +77,7 @@ public sealed class LiveFeedState
     }
 }
 
-/* ── CSV fallback store: one append-only file per symbol/interval ── */
+/* CSV fallback store: one append-only file per symbol/interval */
 public sealed class CsvStore
 {
     private readonly string _dir;
@@ -130,8 +120,6 @@ public sealed class CsvStore
 
     private static string Inv(double d) => d.ToString(CultureInfo.InvariantCulture);
 }
-
-/* ── the poller itself ── */
 public sealed class BinancePoller : BackgroundService
 {
     private static readonly HttpClient Http = new() { Timeout = TimeSpan.FromSeconds(10) };
@@ -192,8 +180,6 @@ public sealed class BinancePoller : BackgroundService
     private async Task PollOnce(CancellationToken ct)
     {
         long nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-        /* 1 · latest closed kline */
         using (var resp = await Http.GetAsync(
             $"{_base}/api/v3/klines?symbol={_symbol}&interval={_interval}&limit=2", ct))
         {
@@ -216,8 +202,6 @@ public sealed class BinancePoller : BackgroundService
                 }
             }
         }
-
-        /* 2 · 24h ticker for the topbar rail */
         var symbolsJson = JsonSerializer.Serialize(TickerSymbols);
         using (var resp = await Http.GetAsync(
             $"{_base}/api/v3/ticker/24hr?symbols={Uri.EscapeDataString(symbolsJson)}", ct))

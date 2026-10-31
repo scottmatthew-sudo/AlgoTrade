@@ -5,10 +5,6 @@ using AlgoTrade.Core;
 
 namespace AlgoTrade.Tests;
 
-/* ═══════════════════════════════════════════════════════════════
-   Indicator oracle — RSI(3) computed BY HAND on a 7-point series,
-   SMA window values, Donchian window exclusion semantics.
-   ═══════════════════════════════════════════════════════════════ */
 public class IndicatorTests
 {
     [Fact]
@@ -46,7 +42,7 @@ public class IndicatorTests
         Assert.Equal(0, down[^1]!.Value, 6);
     }
 
-    /* ── Donchian windows EXCLUDE the current candle (mirrors js) ── */
+    /* Donchian windows EXCLUDE the current candle (mirrors js) */
     [Fact]
     public void Donchian_Window_Excludes_Current_Candle()
     {

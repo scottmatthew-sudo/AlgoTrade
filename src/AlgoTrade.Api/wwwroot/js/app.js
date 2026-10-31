@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · app.js — hash router, topbar (ticker/clock/badges),
-   settings modal, sidebar wiring. Entry point.
-   ═══════════════════════════════════════════════════════════════ */
-
 import { CONFIG } from './config.js';
 import { api } from './api.js';
 import { el, icon, fmt, toast, openModal, confirmModal } from './utils.js';
@@ -12,7 +7,6 @@ import { renderStrategies, renderBacktest } from './views/strategy.js';
 import { renderResults, renderCompare } from './views/results.js';
 import { renderBenchmark } from './views/benchmark.js';
 
-/* ── route table ───────────────────────────────────────────── */
 const ROUTES = [
   { path: '#/dashboard', title: 'Dashboard', crumb: 'Overview', hint: 'Historical simulation — not financial advice', render: renderDashboard },
   { path: '#/import', title: 'Data Import', crumb: 'Market Data', hint: 'Validate before you persist — D18', render: renderImport },
@@ -40,7 +34,6 @@ async function renderResultsHome(root) {
   }
 }
 
-/* ── router ────────────────────────────────────────────────── */
 const viewRoot = document.getElementById('view-root');
 let currentPath = null;
 
@@ -59,23 +52,15 @@ async function route() {
   const match = matchRoute(path);
   const r = match.route;
   const params = match.params;
-
-  // topbar
   document.getElementById('view-title').textContent = r.title;
   document.getElementById('view-crumb').textContent = r.crumb;
   document.getElementById('sb-hint').textContent = r.hint;
-
-  // nav active state
   document.querySelectorAll('.nav-item').forEach(n => {
     const active = n.dataset.route === r.base;
     n.classList.toggle('active', active);
     if (active) n.setAttribute('aria-current', 'page'); else n.removeAttribute('aria-current');
   });
-
-  // close mobile drawer
   document.getElementById('sidebar').classList.remove('open');
-
-  // render
   viewRoot.innerHTML = '';
   const inner = el('div', { class: 'view-inner view-enter' });
   viewRoot.append(inner);
@@ -110,7 +95,6 @@ function matchRoute(path) {
 
 window.addEventListener('hashchange', route);
 
-/* ── topbar: clock (UTC + Pakistan) ────────────────────────── */
 /* Chart candles aur DB sab UTC me hain (exchange convention) —
    UTC wala clock unse aligned rehta hai. PKT wala local ke liye:
    Asia/Karachi = fixed UTC+5, no DST, browser se lete hain.   */
@@ -124,7 +108,6 @@ function tickClock() {
 }
 setInterval(tickClock, 1000); tickClock();
 
-/* ── topbar: live ticker ───────────────────────────────────── */
 const tickerEl = document.getElementById('ticker');
 let prevPrices = {};
 async function tickTicker() {
@@ -149,7 +132,6 @@ async function tickTicker() {
 tickTicker();
 setInterval(tickTicker, 5000);
 
-/* ── mode badge ────────────────────────────────────────────── */
 function renderModeBadge() {
   const badgeEl = document.getElementById('mode-badge');
   const label = document.getElementById('mode-label');
@@ -167,7 +149,6 @@ function renderModeBadge() {
 renderModeBadge();
 window.addEventListener('at:mode-changed', renderModeBadge);
 
-/* ── sidebar engine chip: reflect the REAL backend ─────────── */
 /* index.html ships the static text "READY" (demo engine). In live
    mode this pings /health once per mode change and shows the C#
    engine + db state instead of a label that never updates. */
@@ -189,7 +170,6 @@ async function refreshEngineChip() {
 refreshEngineChip();
 window.addEventListener('at:mode-changed', refreshEngineChip);
 
-/* ── settings modal ────────────────────────────────────────── */
 document.getElementById('settings-btn').addEventListener('click', () => {
   const mockSwitch = el('input', { type: 'checkbox' });
   if (CONFIG.mock) mockSwitch.checked = true;
@@ -240,12 +220,10 @@ document.getElementById('settings-btn').addEventListener('click', () => {
   });
 });
 
-/* ── sidebar mobile wiring ─────────────────────────────────── */
 document.getElementById('sidebar-open').addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
 document.getElementById('sidebar-close').addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
 document.getElementById('sidebar-scrim').addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
 
-/* ── boot ──────────────────────────────────────────────────── */
 if (!location.hash) location.hash = '#/dashboard';
 route();   // immediate first paint in the stored mode
 

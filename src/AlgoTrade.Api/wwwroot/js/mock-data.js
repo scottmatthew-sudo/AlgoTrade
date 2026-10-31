@@ -1,21 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · mock-data.js — in-browser data engine (demo mode)
-
-   Everything here mirrors the C# domain (Blueprint Section 4):
-     Candle {ts,o,h,l,c,v} · StrategyConfig · RiskSettings · Trade ·
-     PerformanceMetrics · ImportResult · BenchmarkResult
-
-   The mini backtest engine implements the LOCKED rules for real:
-     D7  signal computed from completed candle i
-     D8  fills at open of candle i+1
-     D9  SL/TP checked per candle (high/low), stop-first in same candle
-     D11 flat fee per fill
-     D12 equity marked to close of every candle
-     D13 open position force-closed at last close (EndOfData)
-     D14 win = netPnL > 0
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ── seeded RNG (mulberry32) + gaussian ────────────────────── */
 function mulberry32(seed) {
   let a = seed >>> 0;
   return function () {
@@ -32,7 +14,6 @@ function gauss(rng) {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
 
-/* ── GBM candle generator with volatility clustering ───────── */
 export function genCandles({ symbol, seed = 7, n = 1500, tfMinutes = 60, endPrice = 65000, volPct = 0.004, driftPct = 0.00002 }) {
   const rng = mulberry32(seed);
   const tfMs = tfMinutes * 60000;
@@ -42,7 +23,6 @@ export function genCandles({ symbol, seed = 7, n = 1500, tfMinutes = 60, endPric
   let price = endPrice * Math.exp(-driftPct * n); // walk ends near endPrice
   for (let i = 0; i < n; i++) {
     const ts = new Date(start + i * tfMs).toISOString().slice(0, 19);
-    // slow volatility regime + rare shocks
     const regime = 0.65 + 0.7 * (0.5 + 0.5 * Math.sin(i / 60 + seed));
     const shock = rng() < 0.015 ? 2.2 + rng() * 2 : 1;
     const sigma = volPct * regime * shock;
@@ -59,7 +39,6 @@ export function genCandles({ symbol, seed = 7, n = 1500, tfMinutes = 60, endPric
   return out;
 }
 
-/* ── indicators (mirror SlidingWindowSma / RSI in Core) ────── */
 export function sma(values, period) {
   const out = new Array(values.length).fill(null);
   let sum = 0;
@@ -84,7 +63,6 @@ export function rsi(closes, period = 14) {
 export function highestHigh(cs, i, n) { let m = -Infinity; for (let j = Math.max(0, i - n); j < i; j++) m = Math.max(m, cs[j].h); return m; }
 export function lowestLow(cs, i, n)  { let m = Infinity;  for (let j = Math.max(0, i - n); j < i; j++) m = Math.min(m, cs[j].l); return m; }
 
-/* ── mini backtest engine (LOCKED rules D7–D14) ────────────── */
 export function simulate(candles, strat, risk, initialEquity = 10000) {
   const trades = [];
   const equity = new Array(candles.length).fill(initialEquity);
@@ -166,7 +144,7 @@ export function simulate(candles, strat, risk, initialEquity = 10000) {
   return { trades, equity };
 }
 
-/* ── metrics (D14 win = netPnL > 0; PF null when no losers) ── */
+/* metrics (D14 win = netPnL > 0; PF null when no losers) */
 export function metrics(trades, equity, initialEquity) {
   const done = trades.length;
   const wins = trades.filter(t => t.net > 0);
@@ -191,7 +169,7 @@ export function metrics(trades, equity, initialEquity) {
   };
 }
 
-/* ── real monotonic-stack price levels (mirrors Core DSA 7.4) ─ */
+/* real monotonic-stack price levels (mirrors Core DSA 7.4) */
 export function priceLevels(candles, limit = 60) {
   const closes = candles.map(c => c.c);
   const n = closes.length;
@@ -213,7 +191,6 @@ export function priceLevels(candles, limit = 60) {
   });
 }
 
-/* ── real range statistics (mirrors SegmentTree use-case) ──── */
 export function rangeStats(candles, fromTs, toTs) {
   const from = candles.findIndex(c => c.ts >= fromTs);
   let to = candles.length - 1;
@@ -228,7 +205,6 @@ export function rangeStats(candles, fromTs, toTs) {
   return { from, to, count: n, highestHigh: hh, lowestLow: ll, totalVolume: vol, avgClose: sum / n };
 }
 
-/* ── CSV parse + validate (mirrors ImportPipeline Phase 2) ─── */
 export function parseCsv(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim().length);
   if (!lines.length) return { candles: [], issues: [{ row: 0, col: 'file', msg: 'File is empty', rejected: true }], read: 0 };
@@ -265,7 +241,6 @@ export function parseCsv(text) {
   return { candles, issues, read: lines.length - 1, dups, outOfOrder };
 }
 
-/* ── benchmark data (formula-based with jitter) ────────────── */
 export function benchmarkFor(algo, size) {
   const base = {
     hashtable:  { label: 'Hash Table', unit: 'key comparisons', naive: n => n * 1.2, opt: n => n * Math.log2(8), cx: 'O(1) avg' },

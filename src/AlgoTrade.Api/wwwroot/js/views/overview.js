@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · views/overview.js — Dashboard (#/dashboard)
-   + History (#/history) — datasets / strategies / runs browser
-   ═══════════════════════════════════════════════════════════════ */
-
 import { api } from '../api.js';
 import { CONFIG } from '../config.js';
 import { el, icon, fmt, toast } from '../utils.js';
@@ -10,7 +5,6 @@ import { statCard, section, dataTable, statusBadge, badge, emptyState, mockNote,
 import { mountCandleChart, sparkline } from '../charts.js';
 import { openModal, confirmModal } from '../utils.js';
 
-/* ═══════════════ DASHBOARD ═══════════════ */
 export async function renderDashboard(root) {
   root.append(
     el('div', { class: 'page-head' },
@@ -42,7 +36,6 @@ export async function renderDashboard(root) {
     statCard({ label: 'Avg Win Rate', value: avgWin, ico: 'chart', tone: '', sub: 'across completed runs', fmtFn: (v) => v.toFixed(1) + '%' }),
   );
 
-  /* ── hero chart + side rail ──────────────────────────────── */
   const main = el('div', { class: 'grid grid-main-side mt-16' });
 
   const legend = el('div', { class: 'chart-legend' });
@@ -83,8 +76,6 @@ export async function renderDashboard(root) {
   upd(null);
   mountCandleChart(chartBox, full.candles, { onHover: upd });
   main.append(el('div', {}, chart));
-
-  /* side rail */
   const rail = el('div', { class: 'col gap-14' });
   rail.style.gap = '14px';
 
@@ -113,7 +104,6 @@ export async function renderDashboard(root) {
   main.append(rail);
   root.append(main);
 
-  /* ── recent runs ─────────────────────────────────────────── */
   root.append(section('Recent Backtest Runs', { actions: el('button', { class: 'btn btn-ghost btn-sm', text: 'View all →', onclick: () => location.hash = '#/history' }) }));
   const runsWrap = el('div');
   root.append(runsWrap);
@@ -148,7 +138,6 @@ const DSB = CONFIG.mock
   ? { mode: 'MOCK', tone: 'amber', provider: 'in-browser engine' }
   : { mode: 'LIVE', tone: 'teal', provider: 'ASP.NET Core API · Binance 15s' };
 
-/* ═══════════════ HISTORY ═══════════════ */
 export async function renderHistory(root) {
   root.append(
     el('div', { class: 'page-head' },

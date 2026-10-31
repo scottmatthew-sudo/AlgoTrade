@@ -5,17 +5,6 @@ using System.Text.Json.Nodes;
 
 namespace AlgoTrade.Data.Turso;
 
-/* ═══════════════════════════════════════════════════════════════
-   TursoClient — thin async client for Turso (libSQL) platforms.
-
-   One HTTP round-trip per pipeline: N statements execute in order
-   and atomically-enough for our use (a failed statement surfaces
-   as an error result; inserts for one import/run go in one call).
-
-   POST {url}/v2/pipeline
-     { "requests": [ { "type":"execute", "stmt": { "sql":…, "args":[…] } },
-                     { "type":"close" } ] }
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class TursoClient : IDisposable
 {
     private readonly HttpClient _http;
@@ -31,7 +20,6 @@ public sealed class TursoClient : IDisposable
         _http.DefaultRequestHeaders.Add("X-Client", "algotrade-csharp-1.0");
     }
 
-    /* ── arg encoding ─────────────────────────────────────────── */
     public static JsonNode EncodeArg(object? v) => v switch
     {
         null => new JsonObject { ["type"] = "null" },
@@ -86,7 +74,6 @@ public sealed class TursoClient : IDisposable
         return r;
     }
 
-    /* ── response parsing ─────────────────────────────────────── */
     internal static TursoResult[] ParsePipeline(string body)
     {
         using var doc = JsonDocument.Parse(body);

@@ -1,7 +1,3 @@
--- ═══════════════════════════════════════════════════════════════
--- AlgoTrade · 001_schema_turso.sql
--- Turso / libSQL (SQLite) translation of Blueprint Section 5.
---
 -- RULES OF THIS TRANSLATION (locked):
 --   • All money/prices/volumes: INTEGER scaled by 1e6 (suffix I).
 --     C# domain stays decimal (LOCKED D5) — repo layer converts.
@@ -9,7 +5,6 @@
 --     INTEGER scaled by 1e4.
 --   • Timestamps: TEXT ISO-8601 "YYYY-MM-DDTHH:MM:SS" (sortable).
 --   • Timings (MedianMs/MinMs/MaxMs): REAL — benchmarks only, not money.
--- ═══════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS MarketDataset (
   DatasetId      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,8 +62,6 @@ CREATE TABLE IF NOT EXISTS BacktestRun (
   Status       TEXT NOT NULL CHECK (Status IN ('Completed','Failed')),
   ErrorMessage TEXT NULL,
   ExecutionMs  INTEGER NULL,
-
-  -- metric snapshot (scaled)
   InitialEquityI INTEGER NULL,
   FinalEquityI   INTEGER NULL,
   TotalTrades     INTEGER NULL,

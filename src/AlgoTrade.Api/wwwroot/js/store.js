@@ -1,11 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · store.js — in-memory data store for demo mode.
-   Seeds datasets, strategies, and REAL simulated backtest runs
-   (using the mini engine in mock-data.js with LOCKED rules).
-   User actions (import / save strategy / run backtest) mutate
-   this store, exactly like the future SQL repositories will.
-   ═══════════════════════════════════════════════════════════════ */
-
 import { genCandles, simulate, metrics } from './mock-data.js';
 
 const now = Date.now();
@@ -19,7 +11,7 @@ const store = {
   seq: { dataset: 1, strategy: 1, run: 1 },
 };
 
-/* ── run factory (module scope — used by seed AND db.addRun) ── */
+/* run factory (module scope — used by seed AND db.addRun) */
 const mkRun = (dataset, strat, when, execMs, initialEquity = 10000) => {
   const t0 = performance.now();
   const { trades, equity } = simulate(dataset.candles, strat, strat.risk, initialEquity);
@@ -36,7 +28,6 @@ const mkRun = (dataset, strat, when, execMs, initialEquity = 10000) => {
   };
 };
 
-/* ── seed datasets ─────────────────────────────────────────── */
 function mkDataset(name, sym, tf, n, seed, endPrice, volPct, source, days) {
   const candles = genCandles({ symbol: sym, seed, n, tfMinutes: tf, endPrice, volPct });
   const d = {
@@ -59,7 +50,6 @@ export function seed() {
   const aapl = mkDataset('AAPL · daily (demo)',   'AAPL',    1440, 520,  51, 228,   0.011,  'csv-import', 15);
   void btc; void eth; void sol; void aapl;
 
-  /* ── seed strategies ─────────────────────────────────────── */
   const s1 = {
     id: store.seq.strategy++, name: 'SMA Golden Cross 10/30', type: 'sma',
     desc: 'Classic trend following — long when fast SMA crosses above slow SMA.',
@@ -92,7 +82,6 @@ export function seed() {
   );
 }
 
-/* ── live mutators (used by ApiClient in mock mode) ────────── */
 export const db = {
   store,
   addDataset({ name, symbol, timeframe, source, candles, rowsRead, rowsRejected, issues }) {

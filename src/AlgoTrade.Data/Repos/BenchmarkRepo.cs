@@ -3,11 +3,6 @@ using AlgoTrade.Data.Turso;
 
 namespace AlgoTrade.Data.Repos;
 
-/* ═══════════════════════════════════════════════════════════════
-   BenchmarkRepo — persists DSA benchmark batches. One row per
-   (algorithm × variant), grouped by a GUID BatchId, with
-   MachineInfo recorded for the report (Blueprint §7 MachineInfo).
-   ═══════════════════════════════════════════════════════════════ */
 public sealed class BenchmarkRepo
 {
     private readonly TursoClient _db;

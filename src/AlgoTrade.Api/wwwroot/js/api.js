@@ -1,13 +1,3 @@
-/* ═══════════════════════════════════════════════════════════════
-   AlgoTrade · api.js — unified data access layer.
-
-   MOCK mode (default): served by the in-browser engine (store.js).
-   LIVE mode:           calls the ASP.NET Core REST API (Phase 8).
-
-   The endpoint contract below is frozen — the C# controllers must
-   match it exactly, so switching CONFIG.mock = false "just works".
-   ═══════════════════════════════════════════════════════════════ */
-
 import { CONFIG } from './config.js';
 import { db, seed } from './store.js';
 import { parseCsv, priceLevels, rangeStats, benchmarkFor, genCandles } from './mock-data.js';
@@ -77,13 +67,12 @@ function runLite({ equity, trades, m, ...meta }) {
 }
 
 export const api = {
-  /* ── health / mode ─────────────────────────────────────────── */
+
   health: shim(
     async () => ({ mode: 'mock', engine: 'READY', ts: new Date().toISOString() }),
     () => live('GET', '/health'),
   ),
 
-  /* ── datasets ──────────────────────────────────────────────── */
   listDatasets: shim(
     async () => db.store.datasets.map(({ candles, issues, ...meta }) => ({ ...meta, issues: issues?.length ?? 0, spark: candles.filter((_, i) => i % Math.max(1, Math.floor(candles.length / 40)) === 0).map(c => c.c) })),
     () => live('GET', '/datasets'),
@@ -151,7 +140,6 @@ export const api = {
     (id, limit) => live('GET', `/datasets/${id}/pricelevels?limit=${limit}`),
   ),
 
-  /* ── strategies ────────────────────────────────────────────── */
   listStrategies: shim(
     async () => db.store.strategies,
     () => live('GET', '/strategies'),
@@ -167,7 +155,6 @@ export const api = {
     (id) => live('DELETE', `/strategies/${id}`),
   ),
 
-  /* ── backtest runs ─────────────────────────────────────────── */
   listRuns: shim(
     async () => db.store.runs.map(runLite),
     () => live('GET', '/runs'),
@@ -205,7 +192,6 @@ export const api = {
     },
   ),
 
-  /* ── DSA benchmark ─────────────────────────────────────────── */
   benchmarkRun: shim(
     async ({ algos, size, onProgress = () => {} }) => {
       const out = [];
@@ -220,7 +206,6 @@ export const api = {
     ({ algos, size }) => live('GET', `/benchmark?algos=${algos.join(',')}&size=${size}`),
   ),
 
-  /* ── live ticker ───────────────────────────────────────────── */
   ticker: shim(
     async () => {
       const syms = [
